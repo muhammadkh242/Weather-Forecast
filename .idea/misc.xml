@@ -4,11 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_alerts.xml" value="0.1546875" />
-        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_home.xml" value="0.1546875" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_home.xml" value="0.22" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_main.xml" value="0.19635416666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/alerts_screen.xml" value="0.18072916666666666" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/day_row.xml" value="0.33" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/details_cardview.xml" value="0.18072916666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/favorite_screen.xml" value="0.18072916666666666" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/frag.xml" value="0.19635416666666666" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fragment_home.xml" value="0.19635416666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/home_screen.xml" value="0.16" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/hour_row.xml" value="0.25" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/settings_screen.xml" value="0.18072916666666666" />
       </map>
     </option>
