@@ -1,6 +1,8 @@
 package com.example.weatherforecast.network
 
+import com.example.weatherforecast.model.WeatherResponse
+
 interface RemoteSource {
-    fun enqueueCall(networkDelegate: NetworkDelegate)
+    suspend fun getWeatherDefault(): WeatherResponse
 
 }

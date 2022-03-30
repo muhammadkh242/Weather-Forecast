@@ -20,8 +20,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
-            android:textSize="20dp"
-            android:text="7 am"
+            android:textSize="15dp"
+            android:text="7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -43,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="10dp"
             android:text="25"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

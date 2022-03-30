@@ -1,25 +1,33 @@
 package com.example.weatherforecast.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.model.RepositoryInterface
 import com.example.weatherforecast.model.WeatherResponse
-import com.example.weatherforecast.network.NetworkDelegate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class HomeViewModel(private val _repo: RepositoryInterface): ViewModel(), NetworkDelegate {
-    init {
-        _repo.getWeather(this)
-    }
+class HomeViewModel(private val _repo: RepositoryInterface): ViewModel() {
 
     private var _weather: MutableLiveData<WeatherResponse> = MutableLiveData()
     var weather: LiveData<WeatherResponse> = _weather
 
-    override fun onSuccessfulResult(weatherResponse: WeatherResponse) {
-        Log.i("TAG", "onSuccessfulResult: HomeViewModel ")
-        _weather.postValue(weatherResponse)
-
+    init {
+        getWeatherDefault()
     }
+
+    fun getWeatherDefault(){
+        viewModelScope.launch {
+            val weatherDefault = _repo.getWeatherDefault()
+            withContext(Dispatchers.Main){
+                _weather.postValue(weatherDefault)
+            }
+        }
+    }
+
+
 
 }

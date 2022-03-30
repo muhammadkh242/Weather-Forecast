@@ -1,8 +1,6 @@
 package com.example.weatherforecast.model
 
 import android.content.Context
-import android.util.Log
-import com.example.weatherforecast.network.NetworkDelegate
 import com.example.weatherforecast.network.RemoteSource
 
 class Repository(context: Context, remoteSource: RemoteSource): RepositoryInterface {
@@ -21,8 +19,9 @@ class Repository(context: Context, remoteSource: RemoteSource): RepositoryInterf
 
     }
 
-    override fun getWeather(networkDelegate: NetworkDelegate) {
-        Log.i("TAG", "getWeather: Repository")
-        remoteSource.enqueueCall(networkDelegate)
+    override suspend fun getWeatherDefault(): WeatherResponse {
+        return remoteSource.getWeatherDefault()
     }
+
+
 }
