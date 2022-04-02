@@ -1,4 +1,4 @@
-package com.example.weatherforecast.home.view
+package com.example.weatherforecast.week.view
 
 import android.content.Context
 import android.util.Log
@@ -12,8 +12,6 @@ import com.bumptech.glide.Glide
 import com.example.weatherforecast.R
 import com.example.weatherforecast.model.Daily
 import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 class DaysAdapter(private val context: Context): RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 

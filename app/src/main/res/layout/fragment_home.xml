@@ -11,6 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
+        <TextView
+            android:text="Alexandria"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:id="@+id/timeZoneTxt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/tempCard"
             android:layout_width="match_parent"
@@ -20,8 +32,8 @@
             app:cardCornerRadius="50dp"
             app:cardElevation="40dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/timeZoneTxt"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -60,19 +72,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/daysRecycler"
-            app:layout_constraintTop_toBottomOf="@id/hoursRecycler"
-            android:layout_marginTop="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/daysRecycler"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/hoursRecycler"-->
+<!--            android:layout_marginTop="40dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
         
         <GridLayout
             android:elevation="40dp"
             android:id="@+id/detailsGrid"
-            app:layout_constraintTop_toBottomOf="@id/daysRecycler"
+            app:layout_constraintTop_toBottomOf="@id/hoursRecycler"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:columnCount="3"

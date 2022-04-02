@@ -15,10 +15,10 @@ class WeatherClient: RemoteSource {
     private lateinit var retrofit: Retrofit
     private var client: WeatherClient? = null
 
-    override suspend fun getWeatherDefault(): WeatherResponse {
+    override suspend fun getWeatherDefault(units: String, lat: String, lon: String): WeatherResponse {
         val weatherService = RetrofitHelper.getInstance().create(WeatherService::class.java)
 
-        val response = weatherService.getDefaultWeather()
+        val response = weatherService.getDefaultWeather(units = units, lat = lat, lon = lon)
 
         return response
     }
@@ -29,32 +29,5 @@ class WeatherClient: RemoteSource {
             return  instance?: WeatherClient()
         }
     }
-
-
-//    override fun enqueueCall(networkDelegate: NetworkDelegate) {
-//        Log.i("TAG", "enqueueCall: ")
-//        var gson: Gson = GsonBuilder().setLenient().create()
-//        retrofit = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(
-//            GsonConverterFactory.create(gson)
-//        ).build()
-//
-//        var weatherService: WeatherService = retrofit.create(WeatherService::class.java)
-//        var call: Call<WeatherResponse> = weatherService.getWeather(
-//            "31.25654", "32.28411",
-//            "c67c9ddb5f0fa54ea9629f71fd2412d2", "metric"
-//        )
-//        call.enqueue(object : Callback<WeatherResponse> {
-//            override fun onResponse(
-//                call: Call<WeatherResponse>, response: Response<WeatherResponse>
-//            ) {
-//                networkDelegate.onSuccessfulResult(response.body() as WeatherResponse)
-//            }
-//
-//            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-//                Log.i("TAG", "onFailure: " + t.message)
-//            }
-//        })
-//    }
-//
 
 }

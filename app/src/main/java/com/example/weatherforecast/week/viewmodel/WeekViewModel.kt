@@ -1,4 +1,4 @@
-package com.example.weatherforecast.home.viewmodel
+package com.example.weatherforecast.week.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,10 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel(
+class WeekViewModel(
     private val _repo: RepositoryInterface,
     private val unitProvider: UnitProviderInterface,
     private val locationProvider: LocationProviderInterface
+
+
 ): ViewModel() {
 
     private var unit = unitProvider.getUnitSystem().name
@@ -43,7 +45,4 @@ class HomeViewModel(
             }
         }
     }
-
-
-
 }

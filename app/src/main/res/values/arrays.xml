@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unitSystemValues">
+        <item>METRIC</item>
+        <item>IMPERIAL</item>
+        <item>STANDARD</item>
+    </string-array>
+    <string-array name="unitSystemEntries">
+        <item>metric</item>
+        <item>imperial</item>
+        <item>standard</item>
+    </string-array>
+</resources>

@@ -19,8 +19,8 @@ class Repository(context: Context, remoteSource: RemoteSource): RepositoryInterf
 
     }
 
-    override suspend fun getWeatherDefault(): WeatherResponse {
-        return remoteSource.getWeatherDefault()
+    override suspend fun getWeatherDefault(units: String, lat: String, lon: String): WeatherResponse {
+        return remoteSource.getWeatherDefault(units = units, lat = lat, lon = lon)
     }
 
 
