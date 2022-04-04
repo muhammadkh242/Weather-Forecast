@@ -1,5 +1,6 @@
 package com.example.weatherforecast.home.viewmodel
 
+import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -18,10 +19,10 @@ import kotlinx.coroutines.withContext
 
 
 class HomeViewModel(
-    private val context: Context,
     private val _repo: RepositoryInterface,
     private val unitProvider: UnitProviderInterface,
-    private val languageProvider: LanguageProviderInterface
+    private val languageProvider: LanguageProviderInterface,
+    private val application: Application
 ) : ViewModel() {
 
     private var latitude: String? = "31.25654"
@@ -30,59 +31,34 @@ class HomeViewModel(
     var weather: LiveData<WeatherResponse> = _weather
 
     fun getWeatherObject() {
-        if (isOnline(context)) {
+        if (isOnline()) {
             getCurrentWeather(unitProvider.getUnitSystem().name, latitude!!, longitude!!, languageProvider.getLanguage())
         } else {
             getWeatherFromLocaldb()
         }
     }
 
-    fun getCurrentWeather(units: String, latitude: String, longitude: String, language: String) {
-        viewModelScope.launch {
-            val weatherDefault = _repo.getCurrentWeather(
-                units = units,
-                lat = latitude,
-                lon = longitude,
-                lang = language
-            )
-            withContext(Dispatchers.IO) {
-                _weather.postValue(weatherDefault)
-            }
-        }
+    private fun getCurrentWeather(units: String, lat: String, lng: String, language: String) = viewModelScope.launch {
+        val weatherDefault = _repo.getCurrentWeather(units, lat, lng, language)
+        withContext(Dispatchers.IO) { _weather.postValue(weatherDefault) }
     }
 
 
-    fun getWeatherFromLocaldb() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _weather.postValue(_repo.getWeatherOffline())
-            }
-        }
-    }
+    private fun getWeatherFromLocaldb() = viewModelScope.launch { withContext(Dispatchers.IO) {
+        _weather.postValue(_repo.getWeatherOffline())
+    } }
 
 
-    fun isOnline(context: Context): Boolean {
+    private fun isOnline(): Boolean {
         val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        if (connectivityManager != null) {
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                    return true
-                }
-            }
+            application.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return false
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
+        return when {
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
         }
-        return false
     }
-
-
 }

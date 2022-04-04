@@ -1,7 +1,6 @@
 package com.example.weatherforecast.home.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,13 +22,13 @@ class HomeFragment : Fragment() {
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
     private val factory by lazy {
         HomeViewModelFactory(
-            requireContext(),
             Repository.getInstance(
                 requireContext(), WeatherClient.getInstance(),
                 ConcreteLocalSource(requireContext())
             ),
             UnitProvider.getInstance(requireContext()),
-            LanguageProvider.getInstance(requireContext())
+            LanguageProvider.getInstance(requireContext()),
+            requireActivity().application
         )
     }
     private val homeViewModel by lazy { ViewModelProvider(requireActivity(), factory)[HomeViewModel::class.java] }
@@ -38,45 +37,41 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //Getting Recycler View related items ready
-        binding.daysRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.daysRecycler.adapter = DaysAdapter(requireContext())
-        binding.hoursRecycler.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.hoursRecycler.adapter = HoursAdapter(requireContext())
+        setupRecyclerViews()
         setData()
         return binding.root
+    }
+
+    private fun setupRecyclerViews() = binding.apply {
+        daysRecycler.layoutManager = LinearLayoutManager(requireContext())
+        daysRecycler.adapter = DaysAdapter(requireContext())
+        hoursRecycler.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        hoursRecycler.adapter = HoursAdapter(requireContext())
     }
 
     override fun onResume() {
         super.onResume()
         homeViewModel.getWeatherObject()
-        setData()
     }
 
     private fun setData() {
         homeViewModel.weather.observe(viewLifecycleOwner) {
-            if (it != null) {
-                fillWeatherData(it)
-            } else {
-                Log.i("TAG", "onCreateView: NULL LIVE DATA FROM ROOM")
-            }
+            fillWeatherData(it)
             binding.progressBar.visibility = ProgressBar.INVISIBLE
         }
     }
 
-    private fun fillWeatherData(weatherResponse: WeatherResponse) {
-        Log.i("TAG", "Response: HomeFragment ${weatherResponse.toString()}")
-        Log.i("TAG", "Temp: ${weatherResponse.current.temp}")
-        binding.timeZoneTxt.text = weatherResponse.timezone
-        binding.tempTxt.text = weatherResponse.current.temp.toInt().toString()
-        binding.descTxt.text = weatherResponse.current.weather[0].description
-        (binding.hoursRecycler.adapter as HoursAdapter).setData(weatherResponse.hourly)
-        (binding.daysRecycler.adapter as DaysAdapter).setData(weatherResponse.daily)
-        binding.pressureValue.text = "${weatherResponse.current.pressure} hpa"
-        binding.humadityValue.text = "${weatherResponse.current.humidity} %"
-        binding.windValue.text = "${weatherResponse.current.wind_speed} m/s"
-        binding.cloudValue.text = "${weatherResponse.current.clouds} %"
-        binding.uvValue.text = weatherResponse.current.uvi.toString()
-        binding.visibilityValue.text = "${weatherResponse.current.visibility} m"
+    private fun fillWeatherData(weatherResponse: WeatherResponse) = binding.apply {
+        timeZoneTxt.text = weatherResponse.timezone
+        tempTxt.text = weatherResponse.current.temp.toInt().toString()
+        descTxt.text = weatherResponse.current.weather[0].description
+        (hoursRecycler.adapter as HoursAdapter).setData(weatherResponse.hourly)
+        (daysRecycler.adapter as DaysAdapter).setData(weatherResponse.daily)
+        pressureValue.text = "${weatherResponse.current.pressure} hpa"
+        humadityValue.text = "${weatherResponse.current.humidity} %"
+        windValue.text = "${weatherResponse.current.wind_speed} m/s"
+        cloudValue.text = "${weatherResponse.current.clouds} %"
+        uvValue.text = weatherResponse.current.uvi.toString()
+        visibilityValue.text = "${weatherResponse.current.visibility} m"
     }
 }
