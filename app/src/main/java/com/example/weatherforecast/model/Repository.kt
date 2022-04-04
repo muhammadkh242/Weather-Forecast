@@ -1,27 +1,52 @@
 package com.example.weatherforecast.model
 
 import android.content.Context
+import com.example.weatherforecast.db.LocalSource
 import com.example.weatherforecast.network.RemoteSource
 
-class Repository(context: Context, remoteSource: RemoteSource): RepositoryInterface {
+class Repository(
+    var context: Context,
+    var remoteSource: RemoteSource,
+    var localSource: LocalSource,
+) : RepositoryInterface {
 
-    var remoteSource = remoteSource
 
-    companion object{
+    companion object {
         private var repo: Repository? = null
 
-        fun getInstance(context: Context, remoteSource: RemoteSource): Repository{
-            if(repo == null){
-                repo = Repository(context, remoteSource)
+        fun getInstance(
+            context: Context,
+            remoteSource: RemoteSource,
+            localSource: LocalSource
+        ): Repository {
+            if (repo == null) {
+                repo = Repository(context, remoteSource, localSource)
             }
             return repo!!
         }
 
     }
 
-    override suspend fun getWeatherDefault(units: String, lat: String, lon: String): WeatherResponse {
-        return remoteSource.getWeatherDefault(units = units, lat = lat, lon = lon)
+    //get weather over network
+    override suspend fun getCurrentWeather(
+        units: String,
+        lat: String,
+        lon: String,
+        lang: String
+    ): WeatherResponse {
+        val remoteWeather =
+            remoteSource.getCurrentWeather(units = units, lat = lat, lon = lon, lang = lang)
+        insertWeatherResponse(remoteWeather)
+        return remoteWeather
     }
 
 
+    //insert last fetched weather into local db
+    override suspend fun insertWeatherResponse(weatherResponse: WeatherResponse) {
+        localSource.insertWeatherResponse(weatherResponse)
+    }
+
+    override suspend fun getWeatherOffline(): WeatherResponse {
+        return localSource.getWeatherOffline()
+    }
 }

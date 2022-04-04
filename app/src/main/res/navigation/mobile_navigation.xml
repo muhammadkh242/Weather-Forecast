@@ -11,10 +11,10 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/weekFragment"
-        android:name="com.example.weatherforecast.week.view.WeekFragment"
+        android:id="@+id/favoriteFragment"
+        android:name="com.example.weatherforecast.week.view.FavoriteFragment"
         android:label="fragment_week"
-        tools:layout="@layout/fragment_week" />
+        tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.weatherforecast.settings.view.SettingsFragment"

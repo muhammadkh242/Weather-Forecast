@@ -1,5 +1,17 @@
 package com.example.weatherforecast.model
 
+import androidx.lifecycle.LiveData
+import retrofit2.Response
+
 interface RepositoryInterface {
-    suspend fun getWeatherDefault(units: String, lat: String, lon: String): WeatherResponse
+    //get weather over network
+    suspend fun getCurrentWeather(units: String, lat: String, lon: String, lang: String): WeatherResponse
+
+    //insert last fetched weather into local db
+    suspend fun insertWeatherResponse(weatherResponse: WeatherResponse)
+    //suspend fun insertoFromRemoteToLocal(units: String, lat: String, lon: String)
+
+    //get stored weather response from local db
+    suspend fun getWeatherOffline(): WeatherResponse
+
 }

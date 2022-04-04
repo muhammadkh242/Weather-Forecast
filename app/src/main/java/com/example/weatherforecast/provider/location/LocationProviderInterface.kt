@@ -1,5 +1,6 @@
 package com.example.weatherforecast.provider.location
 
+import android.location.Location
 import com.example.weatherforecast.model.WeatherResponse
 
 interface LocationProviderInterface {

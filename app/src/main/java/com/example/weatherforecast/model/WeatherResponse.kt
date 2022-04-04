@@ -1,17 +1,32 @@
 package com.example.weatherforecast.model
 
+import androidx.room.*
+import com.example.weatherforecast.db.DataConverter
+
+
+@Entity(tableName = "weather_response")
 data class WeatherResponse
     (
+    @PrimaryKey(autoGenerate = false)
+    var id : Int = 0,
     var lat: Double,
     var lon: Double,
     var timezone: String,
     var timezone_offset: Double,
+    @Embedded(prefix = "current_")
     var current: Current,
+    @TypeConverters(DataConverter::class)
+
     var minutely: List<Minutely>,
+    @TypeConverters(DataConverter::class)
+
     var hourly: List<Hourly>,
+    @TypeConverters(DataConverter::class)
+
     var daily: List<Daily>
 
 )
+@TypeConverters(DataConverter::class)
 
 data class Current(
     var dt: Long,
@@ -31,6 +46,7 @@ data class Current(
     var weather: ArrayList<Weather>
 )
 
+@TypeConverters(DataConverter::class)
 data class Weather(
     var id: Long,
     var main: String,
@@ -38,11 +54,13 @@ data class Weather(
     var icon: String,
 )
 
+@TypeConverters(DataConverter::class)
 data class Minutely(
     var dt: Long,
     var precipitation: Long
 )
 
+@TypeConverters(DataConverter::class)
 data class Hourly(
     var dt: Long,
     var temp: Double,
@@ -60,6 +78,7 @@ data class Hourly(
     var pop: Double
 )
 
+@TypeConverters(DataConverter::class)
 data class Daily(
     var dt: Long,
     var sunrise: Long,

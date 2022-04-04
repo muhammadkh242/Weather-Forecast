@@ -1,4 +1,4 @@
-package com.example.weatherforecast.week.view
+package com.example.weatherforecast.home.view
 
 import android.content.Context
 import android.util.Log
