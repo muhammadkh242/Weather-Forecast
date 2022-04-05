@@ -2,34 +2,28 @@
 <PreferenceScreen android:key="settingsPref"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Notifications">
+        <SwitchPreference
+            android:key="notifications"
+            android:title="Notifications"
+            android:defaultValue="true"
+            android:summary="allow notifications"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="Location">
-        <CheckBoxPreference
-            android:disableDependentsState="true"
-            android:key="GPS"
-            android:title="GPS"/>
-        <CheckBoxPreference
-            android:key="Map"
-            android:dependency="GPS"
-            android:title="Map"/>
+            <ListPreference
+                android:key="location"
+                android:title="Location"
+                android:defaultValue="GPS"
+                android:entryValues="@array/locationValues"
+                android:entries="@array/locationEntries"
+                android:summary="%s"/>
+
     </PreferenceCategory>
-<!--    <PreferenceCategory-->
-<!--        android:title="Weather Location">-->
-<!--            <SwitchPreference-->
-<!--                android:key="use_device_location"-->
-<!--                android:title="Use device location"-->
-<!--                android:summary="allow the app to get your current location"-->
-<!--                android:defaultValue="true"-->
-<!--                android:disableDependentsState="true"/>-->
-<!--            <EditTextPreference-->
-<!--                android:key="custom_location"-->
-<!--                android:title="Location"-->
-<!--                android:summary="the location for which weather is displayed"-->
-<!--                android:defaultValue="Africa/Cairo"-->
-<!--                android:dependency="use_device_location"/>-->
-
-
-<!--    </PreferenceCategory>-->
 
     <PreferenceCategory
         android:title="Units">

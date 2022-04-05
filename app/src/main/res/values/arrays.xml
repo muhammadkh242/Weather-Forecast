@@ -18,4 +18,13 @@
         <item>English</item>
         <item>Arabic</item>
     </string-array>
+
+    <string-array name="locationValues">
+        <item>gps</item>
+        <item>map</item>
+    </string-array>
+    <string-array name="locationEntries">
+        <item>GPS</item>
+        <item>Map</item>
+    </string-array>
 </resources>

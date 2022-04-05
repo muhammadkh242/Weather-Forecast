@@ -8,15 +8,13 @@ import retrofit2.http.Query
 
 interface WeatherService {
     @GET("onecall")
-
     suspend fun getCurrentWeather(
-        @Query("lat") lat: String = "31.25654",
-        @Query("lon") lon: String = "32.28411",
-        @Query("APPID") app_id: String = "c67c9ddb5f0fa54ea9629f71fd2412d2",
         @Query("units") units: String = "metric",
-        @Query("lang") lang: String = "en"
-
+        @Query("lat") lat: String = "61.5240",
+        @Query("lon") lon: String = "105.3188",
+        @Query("lang") lang: String = "en",
+        @Query("APPID") app_id: String = "c67c9ddb5f0fa54ea9629f71fd2412d2"
     ): WeatherResponse
-
-
 }
+//31.18918918918919
+//30.076999418531887

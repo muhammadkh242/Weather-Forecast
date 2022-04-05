@@ -1,12 +1,10 @@
 package com.example.weatherforecast.home.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecast.model.RepositoryInterface
 import com.example.weatherforecast.provider.Language.LanguageProviderInterface
-import com.example.weatherforecast.provider.location.LocationProviderInterface
 import com.example.weatherforecast.provider.unitsystem.UnitProviderInterface
 
 class HomeViewModelFactory(

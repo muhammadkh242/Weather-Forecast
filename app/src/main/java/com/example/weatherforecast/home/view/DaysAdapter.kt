@@ -41,7 +41,6 @@ class DaysAdapter(private val context: Context): RecyclerView.Adapter<DaysAdapte
     fun setData(days: List<Daily>){
         this.days = days
         notifyDataSetChanged()
-        Log.i("TAG", "Days List Size: " + days.size)
 
     }
 

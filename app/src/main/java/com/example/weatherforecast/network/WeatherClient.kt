@@ -1,17 +1,16 @@
 package com.example.weatherforecast.network
 
+import android.util.Log
 import com.example.weatherforecast.model.WeatherResponse
 import retrofit2.Response
 import retrofit2.Retrofit
 
 class WeatherClient: RemoteSource {
 
-    override suspend fun getCurrentWeather(units: String, lat: String, lon: String, lang: String): WeatherResponse {
+    override suspend fun getCurrentWeather(units: String, lat: String, lng: String, lang: String): WeatherResponse {
+        Log.i("TAG", "getCurrentWeather: WeatherClient $lat $lng")
         val weatherService = RetrofitHelper.getInstance().create(WeatherService::class.java)
-
-        val response = weatherService.getCurrentWeather(units = units, lat = lat, lon = lon, lang = lang)
-
-        return response
+        return weatherService.getCurrentWeather(units, lat, lng, lang)
     }
 
     companion object{
@@ -20,5 +19,4 @@ class WeatherClient: RemoteSource {
             return  instance?: WeatherClient()
         }
     }
-
 }

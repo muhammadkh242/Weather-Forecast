@@ -41,8 +41,8 @@ class HoursAdapter (private val context: Context): RecyclerView.Adapter<HoursAda
 
     fun setData(hours: List<Hourly>){
         this.hours = hours
+        Log.i("TAG", "setData: ${hours.size}")
         notifyDataSetChanged()
-        Log.i("TAG", "Hours List Size: " + hours.size)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
