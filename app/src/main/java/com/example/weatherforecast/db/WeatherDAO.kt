@@ -2,6 +2,7 @@ package com.example.weatherforecast.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.WeatherResponse
 
 
@@ -19,7 +20,16 @@ interface WeatherDAO {
     @Query("SELECT * From weather_response")
     fun getWeatherOffline(): WeatherResponse
 
-    //delete weather response from local db
+    //insert to favorite
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertFvorite(favorite: Favorite)
+
+    //get favorite
+    @get:Query("SELECT * From favorite")
+    val favorites: LiveData<List<Favorite>>
+//    fun getFavorites(): List<Favorite>
+
+
 
 
 }

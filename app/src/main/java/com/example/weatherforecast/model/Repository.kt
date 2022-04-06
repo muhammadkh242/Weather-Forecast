@@ -1,6 +1,7 @@
 package com.example.weatherforecast.model
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.example.weatherforecast.db.LocalSource
 import com.example.weatherforecast.network.RemoteSource
 
@@ -49,4 +50,13 @@ class Repository(
     override suspend fun getWeatherOffline(): WeatherResponse {
         return localSource.getWeatherOffline()
     }
+
+    override fun insertFavorite(favorite: Favorite) {
+        localSource.insertFavorite(favorite)
+
+    }
+
+    override val favorites: LiveData<List<Favorite>>
+        get() = localSource.favorites
+
 }

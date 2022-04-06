@@ -14,4 +14,10 @@ interface RepositoryInterface {
     //get stored weather response from local db
     suspend fun getWeatherOffline(): WeatherResponse
 
+    //insert favorite into local db
+    fun insertFavorite(favorite: Favorite)
+
+    //get favorites
+    val favorites: LiveData<List<Favorite>>
+
 }

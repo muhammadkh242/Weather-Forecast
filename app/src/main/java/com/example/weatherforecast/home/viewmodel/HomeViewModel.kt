@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,7 @@ class HomeViewModel(
         if (isOnline()) {
             getCurrentWeather(unitProvider.getUnitSystem().name, lat.toString()!!, lng.toString()!!, languageProvider.getLanguage())
         } else {
+            Toast.makeText(application.applicationContext, "No internet connection", Toast.LENGTH_LONG)
             getWeatherFromLocaldb()
         }
     }

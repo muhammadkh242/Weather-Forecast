@@ -24,7 +24,7 @@ import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.home.viewmodel.HomeViewModel
 import com.example.weatherforecast.home.viewmodel.HomeViewModelFactory
-import com.example.weatherforecast.map.MapsActivity
+import com.example.weatherforecast.map.view.MapsActivity
 import com.example.weatherforecast.model.Repository
 import com.example.weatherforecast.model.WeatherResponse
 import com.example.weatherforecast.network.WeatherClient
