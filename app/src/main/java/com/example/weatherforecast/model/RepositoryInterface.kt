@@ -20,4 +20,8 @@ interface RepositoryInterface {
     //get favorites
     val favorites: LiveData<List<Favorite>>
 
+    //delete favorite
+    fun deleteFavorite(favorite: Favorite)
+    //get fav weather over network
+    suspend fun getFavotiteWeather(units: String, lat: String, lon: String, lang: String): WeatherResponse
 }

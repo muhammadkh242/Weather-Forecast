@@ -1,15 +1,12 @@
 package com.example.weatherforecast.model
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.weatherforecast.db.LocalSource
 import com.example.weatherforecast.network.RemoteSource
 
-class Repository(
-    var context: Context,
-    var remoteSource: RemoteSource,
-    var localSource: LocalSource,
-) : RepositoryInterface {
+class Repository(var context: Context, var remoteSource: RemoteSource, var localSource: LocalSource, ) : RepositoryInterface {
 
 
     companion object {
@@ -29,12 +26,7 @@ class Repository(
     }
 
     //get weather over network
-    override suspend fun getCurrentWeather(
-        units: String,
-        lat: String,
-        lon: String,
-        lang: String
-    ): WeatherResponse {
+    override suspend fun getCurrentWeather(units: String, lat: String, lon: String, lang: String): WeatherResponse {
         val remoteWeather =
             remoteSource.getCurrentWeather(units = units, lat = lat, lon = lon, lang = lang)
         insertWeatherResponse(remoteWeather)
@@ -58,5 +50,15 @@ class Repository(
 
     override val favorites: LiveData<List<Favorite>>
         get() = localSource.favorites
+
+    override fun deleteFavorite(favorite: Favorite) {
+        localSource.deleteFavorite(favorite)
+    }
+
+    override suspend fun getFavotiteWeather(units: String, lat: String, lng: String, lang: String): WeatherResponse {
+        Log.i("TAG", "getFavotiteWeather: ${remoteSource.getCurrentWeather(units, lat, lng, lang)}")
+        return remoteSource.getCurrentWeather(units, lat, lng, lang)
+    }
+
 
 }

@@ -14,4 +14,8 @@ interface LocalSource {
     //get favorites
     val favorites: LiveData<List<Favorite>>
 
+    //delete favorite
+    fun deleteFavorite(favorite: Favorite)
+
+
 }

@@ -14,6 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherForecast">
+        <activity
+            android:name=".favorite.view.Test"
+            android:exported="false" />
+        <activity
+            android:name=".favorite.view.FavoriteActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -32,10 +38,6 @@
         <activity
             android:name=".alerts.view.AlertsActivity"
             android:exported="false" />
-        <activity
-            android:name=".favorite.view.FavActivity"
-            android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">

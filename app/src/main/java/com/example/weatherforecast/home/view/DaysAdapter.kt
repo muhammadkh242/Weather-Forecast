@@ -1,6 +1,7 @@
 package com.example.weatherforecast.home.view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +39,8 @@ class DaysAdapter(private val context: Context): RecyclerView.Adapter<DaysAdapte
     }
 
     fun setData(days: List<Daily>){
+        Log.i("TAG", "setData: ${days.size}")
+
         this.days = days
         notifyDataSetChanged()
 

@@ -35,4 +35,9 @@ class ConcreteLocalSource(context: Context): LocalSource {
     override suspend fun insertWeatherResponse(weatherResponse: WeatherResponse) {
         dao?.insertWeatherResponse(weatherResponse)
     }
+
+    override fun deleteFavorite(favorite: Favorite) {
+        dao?.deleteFavorite(favorite)
+    }
+
 }

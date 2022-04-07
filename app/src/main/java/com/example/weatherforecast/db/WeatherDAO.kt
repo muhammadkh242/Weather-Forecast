@@ -14,9 +14,6 @@ interface WeatherDAO {
     suspend fun insertWeatherResponse(weatherResponse: WeatherResponse)
 
     //get stored weather response
-   // @get:Query("SELECT * From weather_response where id = 0")
-//    val weatherResponse: LiveData<WeatherResponse>
-
     @Query("SELECT * From weather_response")
     fun getWeatherOffline(): WeatherResponse
 
@@ -27,8 +24,10 @@ interface WeatherDAO {
     //get favorite
     @get:Query("SELECT * From favorite")
     val favorites: LiveData<List<Favorite>>
-//    fun getFavorites(): List<Favorite>
 
+    //delete favorite item
+    @Delete
+    fun deleteFavorite(favorite: Favorite)
 
 
 

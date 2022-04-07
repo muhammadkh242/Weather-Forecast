@@ -4,7 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.model.Favorite
@@ -22,6 +25,19 @@ class FavAdapter(private val context: Context, private val onItemClickListener: 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.cityTxt.text = favList[position].addressLine
+
+       holder.menuIcon.setOnClickListener {
+            val popUp: PopupMenu = PopupMenu(context, holder.menuIcon)
+            popUp.inflate(R.menu.options_menu)
+            popUp.setOnMenuItemClickListener {
+                onItemClickListener.onDeleteClick(favList[position])
+                return@setOnMenuItemClickListener false
+            }
+
+            popUp.show()
+
+        }
+
         holder.itemView.setOnClickListener { onItemClickListener.onClick(favList[position]) }
     }
 
@@ -35,6 +51,7 @@ class FavAdapter(private val context: Context, private val onItemClickListener: 
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val cityTxt: TextView = itemView.findViewById(R.id.favCityName)
+        val menuIcon: TextView = itemView.findViewById(R.id.menuIcon)
     }
 
 }

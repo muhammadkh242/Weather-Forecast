@@ -36,16 +36,9 @@ import com.google.android.gms.location.LocationServices
 
 class HomeFragment : Fragment() {
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
-    private val factory by lazy {
-        HomeViewModelFactory(
-            Repository.getInstance(
-                requireContext(), WeatherClient.getInstance(),
-                ConcreteLocalSource(requireContext())
-            ),
-            UnitProvider.getInstance(requireContext()),
-            LanguageProvider.getInstance(requireContext()),
-            requireActivity().application
-        )
+    private val factory by lazy { HomeViewModelFactory(Repository.getInstance(requireContext(), WeatherClient.getInstance(),
+                ConcreteLocalSource(requireContext())), UnitProvider.getInstance(requireContext()), LanguageProvider.getInstance(requireContext()),
+            requireActivity().application)
     }
     private val homeViewModel by lazy { ViewModelProvider(requireActivity(), factory)[HomeViewModel::class.java] }
     private val pref by lazy{ PreferenceManager.getDefaultSharedPreferences(requireContext()) }

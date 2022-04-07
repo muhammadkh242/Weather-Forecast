@@ -31,7 +31,6 @@ class HoursAdapter (private val context: Context): RecyclerView.Adapter<HoursAda
         holder.hourTxt.text = getHourFromTime(currentHour.dt)
         val iconUrl: String = "https://openweathermap.org/img/wn/${currentHour.weather[0].icon}@2x.png"
         Glide.with(context).load(iconUrl).centerCrop().into(holder.hourStateIcon)
-//        Log.i("TAG", "hour state icon : " + currentHour.weather[0].icon.toString())
 
     }
 

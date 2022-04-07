@@ -4,4 +4,5 @@ import com.example.weatherforecast.model.Favorite
 
 interface OnItemClickListener {
     fun onClick(favorite: Favorite)
+    fun onDeleteClick(favorite: Favorite)
 }

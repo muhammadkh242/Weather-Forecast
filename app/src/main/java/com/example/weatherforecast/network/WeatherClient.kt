@@ -8,7 +8,6 @@ import retrofit2.Retrofit
 class WeatherClient: RemoteSource {
 
     override suspend fun getCurrentWeather(units: String, lat: String, lng: String, lang: String): WeatherResponse {
-        Log.i("TAG", "getCurrentWeather: WeatherClient $lat $lng")
         val weatherService = RetrofitHelper.getInstance().create(WeatherService::class.java)
         return weatherService.getCurrentWeather(units, lat, lng, lang)
     }

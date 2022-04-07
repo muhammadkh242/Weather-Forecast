@@ -67,17 +67,8 @@ class HomeViewModel(
     }
 
     fun setLastLocation(lat: Double, lng: Double) {
-        // Check if settled from device location or from preferences
-        /*
-        if fromDeviceLocation
-            set livedata for location with the locationObject
-            locationLiveData.value = LocationObject(lng, lat)
-        else fromSelectedValues
-            call liveData to choose from map
-         */
         Log.i("TAG", "setLastLocation: $lat $lng")
         _locationLiveData.value = LocationObject(lat, lng)
-
 
     }
 }

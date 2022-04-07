@@ -6,6 +6,7 @@ import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecast.MainActivity
 import com.example.weatherforecast.R
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import java.io.IOException
 import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -46,16 +48,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        if(intent.extras?.get("map_request") != null){
+            Log.i("TAG", "onCreate: ${intent.extras!!.get("map_request")}")
 
-        Log.i("TAG", "onCreate: ${intent.extras!!.get("map_request")}")
+        }
 
         binding.doneBtn.setOnClickListener {
-            if(intent.extras!!.get("map_request")!!.equals("fav")){
+            if(intent.extras?.get("map_request") != null && intent.extras?.get("map_request")!!.equals("fav")){
                 val addressLine = getCityFromMarkedCoord(selectedLat.toDouble(), selectedLng.toDouble())
-                Favorite(selectedLat.toDouble(), selectedLng.toDouble(),addressLine).apply {
-                    saveMarkIntoFavPlaces(this)
+
+                if(addressLine != "Connection Problem"){
+                    Favorite(selectedLat.toDouble(), selectedLng.toDouble(),addressLine).apply {
+                        saveMarkIntoFavPlaces(this)
+                        Toast.makeText(this@MapsActivity, "Saved Place", Toast.LENGTH_SHORT).show()
+                    }
+                    finish()
                 }
-                finish()
+                else{
+                    Toast.makeText(this@MapsActivity, "Save Failed, No Internet Connection", Toast.LENGTH_LONG).show()
+
+                }
+
             }
             else{
                 saveMarkIntoPref()
@@ -115,20 +128,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getCityFromMarkedCoord(lat: Double, lng: Double): String{
-        val geoCoder = Geocoder(this, Locale.getDefault())
-        val addresses = geoCoder.getFromLocation(lat,lng, 1)
+        try{
+            val geoCoder = Geocoder(this, Locale.getDefault())
+            val addresses = geoCoder.getFromLocation(lat,lng, 1)
 
-        if(addresses[0].adminArea ==null && addresses[0].locality ==null){
-            return addresses[0].countryName
-        }
-        else if (addresses[0].adminArea == null){
-            return "${addresses[0].countryName}, ${addresses[0].locality}"
-        }
-        else if (addresses[0].locality == null){
-            return "${addresses[0].countryName}, ${addresses[0].adminArea}"
-        }
+            if(addresses[0].adminArea ==null && addresses[0].locality ==null){
+                return addresses[0].countryName
+            }
+            else if (addresses[0].adminArea == null){
+                return "${addresses[0].countryName}, ${addresses[0].locality}"
+            }
+            else if (addresses[0].locality == null){
+                return "${addresses[0].countryName}, ${addresses[0].adminArea}"
+            }
+            return "${addresses[0].countryName}, ${addresses[0].adminArea}, ${addresses[0].locality}"
 
-        return "${addresses[0].countryName}, ${addresses[0].adminArea}, ${addresses[0].locality}"
+        }catch (e: IOException){
+            return "Connection Problem"
+        }
     }
 
 
