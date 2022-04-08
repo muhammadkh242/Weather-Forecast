@@ -84,6 +84,9 @@ dependencies {
     //dialog
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
 
+    //worker
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+
 
 
 

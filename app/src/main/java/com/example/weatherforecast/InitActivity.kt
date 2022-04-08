@@ -37,7 +37,7 @@ class InitActivity : AppCompatActivity() {
         editor = preferences.edit()
     }
 
-    fun showDialog(){
+    private fun showDialog(){
         val dialog = MaterialDialog(this).noAutoDismiss().customView(R.layout.initial_setup_dialog)
         dialog.findViewById<TextView>(R.id.apply_button).setOnClickListener {
             val locSetup = dialog.getCustomView().findViewById<RadioButton>(
