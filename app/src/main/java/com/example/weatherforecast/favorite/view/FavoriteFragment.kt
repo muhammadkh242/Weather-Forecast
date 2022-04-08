@@ -14,12 +14,14 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentFavoriteBinding
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.favorite.viewmodel.FavActivityViewModel
 import com.example.weatherforecast.favorite.viewmodel.FavActivityViewModelFactory
 import com.example.weatherforecast.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherforecast.favorite.viewmodel.FavoriteViewModelFactory
+import com.example.weatherforecast.home.view.HomeFragment
 import com.example.weatherforecast.map.view.MapsActivity
 import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.Repository
@@ -78,9 +80,11 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
         } else{
             Toast.makeText(requireContext(), " No Internet Connection ", Toast.LENGTH_SHORT).show()
         }*/
-        var intent = Intent(requireContext(), Test::class.java)
+        /*var intent = Intent(requireContext(), Test::class.java)
         intent.putExtra("favorite_obj", favorite)
-        startActivity(intent)
+        startActivity(intent)*/
+//        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.favoriteFragment, HomeFragment())
+//            .commitNow()
     }
 
     override fun onDeleteClick(favorite: Favorite) {

@@ -17,9 +17,11 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.home.viewmodel.HomeViewModel
@@ -32,6 +34,7 @@ import com.example.weatherforecast.provider.Language.LanguageProvider
 import com.example.weatherforecast.provider.unitsystem.UnitProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -41,7 +44,7 @@ class HomeFragment : Fragment() {
             requireActivity().application)
     }
     private val homeViewModel by lazy { ViewModelProvider(requireActivity(), factory)[HomeViewModel::class.java] }
-    private val pref by lazy{ PreferenceManager.getDefaultSharedPreferences(requireContext()) }
+    private val defaultPref by lazy{ PreferenceManager.getDefaultSharedPreferences(requireContext()) }
 
     private val mapPref by lazy{ requireContext().getSharedPreferences("mapPref",  Context.MODE_PRIVATE) }
     private var lastLocation: Location? = null
@@ -51,21 +54,19 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         setupRecyclerViews()
+        setUnits()
+        languageSettings()
 
+        val locationMode = defaultPref.getString("location", "map")
+
+        checkPreferences(locationMode!!)
         observeWeather()
-
-        val locationMode = pref.getString("location", "not selected")
-
-        if (locationMode != null) {
-            checkPreferences(locationMode)
-        }
-        else{
-            Toast.makeText(requireContext(), "Please Set Location From Settings", Toast.LENGTH_LONG)
-        }
 
         return binding.root
     }
+
 
     private fun setupRecyclerViews() = binding.apply {
         daysRecycler.layoutManager = LinearLayoutManager(requireContext())
@@ -74,20 +75,22 @@ class HomeFragment : Fragment() {
         hoursRecycler.adapter = HoursAdapter(requireContext())
     }
 
+
     override fun onResume() {
         super.onResume()
         //homeViewModel.getWeatherObject()
     }
 
     private fun observeWeather() {
+        Log.i("TAG", "observeWeather: ")
         homeViewModel.weather.observe(viewLifecycleOwner) {
             fillWeatherData(it)
+            //setUnits()
             binding.progressBar.visibility = ProgressBar.INVISIBLE
         }
     }
 
     private fun fillWeatherData(weatherResponse: WeatherResponse) = binding.apply {
-        timeZoneTxt.text = weatherResponse.timezone
         tempTxt.text = weatherResponse.current.temp.toInt().toString()
         descTxt.text = weatherResponse.current.weather[0].description
         (hoursRecycler.adapter as HoursAdapter).setData(weatherResponse.hourly.slice(IntRange(0,23)))
@@ -124,14 +127,25 @@ class HomeFragment : Fragment() {
         }
     }
 
-
+    fun setUnits(){
+        when(defaultPref.getString("unit_system", "metric")){
+            "metric" -> {
+                binding.unitTxt.text = " °C"
+            }
+            "imperial" -> {
+                binding.unitTxt.text = " °F"
+            }
+            "standard" -> {
+                binding.unitTxt.text = " °K"
+            }
+        }
+    }
     private fun requestPermissions() {
         val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
             requireActivity(),
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
         if (shouldProvideRationale) {
-            Log.i("TAG", "Displaying permission rationale to provide additional context.")
             showSnackbar("Location permission is needed for core functionality", "Okay") {
                 startLocationPermissionRequest()
             }
@@ -163,18 +177,17 @@ class HomeFragment : Fragment() {
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
                 grantResults.isEmpty() -> {
-                    // If user interaction was interrupted, the permission request is cancelled and you
-                    // receive empty arrays.
+
                     Log.i("TAG", "User interaction was cancelled.")
                 }
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
-                    // Permission granted.
+                    Log.i("TAG", "User interaction was Accepted.")
+
                     getLastLocation()
                 }
                 else -> {
                     showSnackbar("Permission was denied", "Settings",
                         View.OnClickListener {
-                            // Build intent that displays the App settings screen.
                             val intent = Intent()
                             intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                             val uri = Uri.fromParts(
@@ -202,7 +215,6 @@ class HomeFragment : Fragment() {
                 if (task.isSuccessful && task.result != null) {
                     lastLocation = task.result
                     Log.i("TAG", "getLastLocation: ${lastLocation!!.latitude} ${lastLocation!!.longitude}")
-                    //  Set location values inside viewModel ( viewModel.setLastLocation(task.lng, task.lat) )
                     homeViewModel.setLastLocation(lastLocation!!.latitude, lastLocation!!.longitude)
                 }
                 else {
@@ -211,6 +223,38 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun languageSettings(){
+        if (defaultPref.getString("language","en").equals("ar")) { //switch to arabic
+            var locale = Locale("ar")
+            val res = resources
+            val dm = res.displayMetrics
+            val conf = res.configuration
+            conf.locale = locale
+            res.updateConfiguration(conf, dm)
+            val ft: FragmentTransaction = requireFragmentManager().beginTransaction()
+            if (Build.VERSION.SDK_INT >= 26) {
+                ft.setReorderingAllowed(false)
+            }
+            ft.detach(this).attach(this).commit()
+
+        } else {
+
+            var locale = Locale("en")
+            val res = resources
+            val dm = res.displayMetrics
+            val conf = res.configuration
+            conf.locale = locale
+            res.updateConfiguration(conf, dm)
+            val ft: FragmentTransaction = requireFragmentManager().beginTransaction()
+            if (Build.VERSION.SDK_INT >= 26) {
+                ft.setReorderingAllowed(false)
+            }
+            ft.detach(this).attach(this).commit()
+
+        }
+
     }
 
     companion object {

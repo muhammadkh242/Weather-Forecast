@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/bill.xml" value="0.1665" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/favorite.xml" value="0.1155" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/ic_7days.xml" value="0.104" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/ic_settings.xml" value="0.104" />
@@ -11,6 +12,7 @@
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_alerts.xml" value="0.1546875" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_favorite.xml" value="0.19635416666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_home.xml" value="0.22" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_init.xml" value="0.18072916666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_main.xml" value="0.19635416666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_maps.xml" value="0.18020833333333333" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/activity_test.xml" value="0.18072916666666666" />
@@ -21,12 +23,14 @@
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fav_row.xml" value="0.33" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/favorite_screen.xml" value="0.18072916666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/frag.xml" value="0.19635416666666666" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fragment_alerts.xml" value="0.15729166666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fragment_favorite.xml" value="0.18" />
-        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fragment_home.xml" value="0.15" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fragment_home.xml" value="0.14943097476496783" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fragment_settings.xml" value="0.18072916666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/fragment_week.xml" value="0.18072916666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/home_screen.xml" value="0.16" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/hour_row.xml" value="0.5" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/initial_setup_dialog.xml" value="0.25" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/settings_screen.xml" value="0.18072916666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/menu/bottom_nav.xml" value="0.19635416666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/menu/options_menu.xml" value="0.19635416666666666" />

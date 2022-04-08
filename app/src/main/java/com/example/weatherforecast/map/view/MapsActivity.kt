@@ -48,10 +48,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        if(intent.extras?.get("map_request") != null){
-            Log.i("TAG", "onCreate: ${intent.extras!!.get("map_request")}")
-
-        }
 
         binding.doneBtn.setOnClickListener {
             if(intent.extras?.get("map_request") != null && intent.extras?.get("map_request")!!.equals("fav")){
