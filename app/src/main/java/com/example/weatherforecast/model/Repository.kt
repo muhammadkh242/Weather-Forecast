@@ -60,5 +60,16 @@ class Repository(var context: Context, var remoteSource: RemoteSource, var local
         return remoteSource.getCurrentWeather(units, lat, lng, lang)
     }
 
+    override fun insertLert(alert: Alert) {
+        localSource.insertAlert(alert)
+    }
+
+    override fun deleteAlert(alert: Alert) {
+        localSource.deleteAlert(alert)
+    }
+
+    override val alerts: LiveData<List<Alert>>
+        get() = localSource.alerts
+
 
 }

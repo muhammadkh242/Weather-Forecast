@@ -88,39 +88,4 @@ class DataConverter {
         return gson.fromJson(weatherString, type)
     }
 
-   /* @TypeConverter
-    fun currentToJson(current: Current?) = Gson().toJson(current)
-
-    @TypeConverter
-    fun jsonToCurrent(currentString: String) =
-        Gson().fromJson(currentString, Current::class.java)
-
-    @TypeConverter
-    fun hourlyListToJson(hourlyList: List<Hourly>?) = Gson().toJson(hourlyList)
-
-    @TypeConverter
-    fun jsonToHourlyList(hourlyString: String) =
-        Gson().fromJson(hourlyString, Array<Hourly>::class.java)?.toList()
-    @TypeConverter
-    fun minutelyListToJson(hourlyList: List<Minutely>?) = Gson().toJson(hourlyList)
-
-    @TypeConverter
-    fun jsonToMinutelyList(hourlyString: String) =
-        Gson().fromJson(hourlyString, Array<Minutely>::class.java)?.toList()
-
-    @TypeConverter
-    fun dailyListToJson(dailyList: List<Daily>) = Gson().toJson(dailyList)
-
-    @TypeConverter
-    fun jsonToDailyList(dailyString: String) =
-        Gson().fromJson(dailyString, Array<Daily>::class.java).toList()
-
-    @TypeConverter
-    fun weatherListToJson(weatherList: List<Weather>) = Gson().toJson(weatherList)
-
-    @TypeConverter
-    fun jsonToWeatherList(weatherString: String) =
-        Gson().fromJson(weatherString, Array<Weather>::class.java).toList()
-*/
-
 }

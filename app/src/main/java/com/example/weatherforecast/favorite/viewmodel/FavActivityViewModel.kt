@@ -17,8 +17,6 @@ class FavActivityViewModel(
     private val _repo: RepositoryInterface,
     private val unitProvider: UnitProviderInterface,
     private val languageProvider: LanguageProviderInterface,
-    //private var lat: String,
-    //private var lng: String
 ): ViewModel() {
 
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import retrofit2.Response
 
 interface RepositoryInterface {
+
     //get weather over network
     suspend fun getCurrentWeather(units: String, lat: String, lon: String, lang: String): WeatherResponse
 
@@ -24,4 +25,11 @@ interface RepositoryInterface {
     fun deleteFavorite(favorite: Favorite)
     //get fav weather over network
     suspend fun getFavotiteWeather(units: String, lat: String, lon: String, lang: String): WeatherResponse
+
+    //insert alert
+    fun insertLert(alert: Alert)
+    //delete alert
+    fun deleteAlert(alert: Alert)
+    //get alerts
+    val alerts: LiveData<List<Alert>>
 }

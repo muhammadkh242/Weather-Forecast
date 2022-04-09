@@ -2,6 +2,7 @@ package com.example.weatherforecast.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.weatherforecast.model.Alert
 import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.WeatherResponse
 
@@ -28,6 +29,19 @@ interface WeatherDAO {
     //delete favorite item
     @Delete
     fun deleteFavorite(favorite: Favorite)
+
+    //insert alert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertAlert(alert: Alert)
+
+    //delete alert
+    @Delete
+    fun deleteAlert(alert: Alert)
+
+    //get alerts
+    @get:Query("SELECT * fROM alerts")
+    val alerts: LiveData<List<Alert>>
+
 
 
 

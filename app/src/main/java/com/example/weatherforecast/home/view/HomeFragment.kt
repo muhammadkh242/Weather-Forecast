@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Build
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -32,8 +34,13 @@ import com.example.weatherforecast.model.WeatherResponse
 import com.example.weatherforecast.network.WeatherClient
 import com.example.weatherforecast.provider.Language.LanguageProvider
 import com.example.weatherforecast.provider.unitsystem.UnitProvider
+import com.example.weatherforecast.utils.GeoCoderConverter
+import com.example.weatherforecast.utils.UnitSystem
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.io.IOException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -50,6 +57,7 @@ class HomeFragment : Fragment() {
     private var lastLocation: Location? = null
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,6 +65,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerViews()
         setUnits()
+        setDateTxt()
         languageSettings()
 
         val locationMode = defaultPref.getString("location", "map")
@@ -82,10 +91,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeWeather() {
-        Log.i("TAG", "observeWeather: ")
         homeViewModel.weather.observe(viewLifecycleOwner) {
             fillWeatherData(it)
-            //setUnits()
+            setWeatherStateImag(it)
+            setAddressText(it)
             binding.progressBar.visibility = ProgressBar.INVISIBLE
         }
     }
@@ -101,7 +110,41 @@ class HomeFragment : Fragment() {
         cloudValue.text = "${weatherResponse.current.clouds} %"
         uvValue.text = weatherResponse.current.uvi.toString()
         visibilityValue.text = "${weatherResponse.current.visibility} m"
-        Log.i("TAG", "fillWeatherData: ${weatherResponse.lat}")
+    }
+
+    private fun setWeatherStateImag(weatherResponse: WeatherResponse){
+        val weatherState = weatherResponse.current.weather[0].description
+        when(weatherState){
+            "clear sky" -> binding.descImage.setImageResource(R.drawable.clearsky)
+            "scattered clouds" -> binding.descImage.setImageResource(R.drawable.scatteredclouds)
+            "overcast clouds" -> binding.descImage.setImageResource(R.drawable.overcastclouds)
+            "broken clouds" -> binding.descImage.setImageResource(R.drawable.brokenclouds)
+        }
+    }
+    private fun setAddressText(weatherResponse: WeatherResponse){
+        val addressLine = GeoCoderConverter.getCityFromMarkedCoord(weatherResponse.lat, weatherResponse.lon, requireContext())
+        if(!addressLine.equals("Connection Problem")){
+            binding.addressTxt.text = addressLine
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setDateTxt(){
+        val current = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+        val formatted = current.format(formatter)
+        binding.dateTxt.text = formatted
+    }
+    fun setUnits(){
+        val unit = defaultPref.getString("unit_system", "metric")
+        if(unit!!.equals(UnitSystem.IMPERIAL.name)){
+            binding.unitTxt.text = " °F"
+        }
+        else if(unit!!.equals(UnitSystem.STANDARD.name)){
+            binding.unitTxt.text = " °K"
+        }
+        else{
+            binding.unitTxt.text = " °C"
+        }
     }
 
     private fun checkPreferences(locationMode: String){
@@ -127,19 +170,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun setUnits(){
-        when(defaultPref.getString("unit_system", "metric")){
-            "metric" -> {
-                binding.unitTxt.text = " °C"
-            }
-            "imperial" -> {
-                binding.unitTxt.text = " °F"
-            }
-            "standard" -> {
-                binding.unitTxt.text = " °K"
-            }
-        }
-    }
+
     private fun requestPermissions() {
         val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
             requireActivity(),

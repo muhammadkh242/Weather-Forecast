@@ -8,10 +8,12 @@ import android.os.Bundle
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.example.weatherforecast.utils.Connection
 
 
 class InitActivity : AppCompatActivity() {
@@ -40,15 +42,21 @@ class InitActivity : AppCompatActivity() {
     private fun showDialog(){
         val dialog = MaterialDialog(this).noAutoDismiss().customView(R.layout.initial_setup_dialog)
         dialog.findViewById<TextView>(R.id.apply_button).setOnClickListener {
-            val locSetup = dialog.getCustomView().findViewById<RadioButton>(
-                dialog.getCustomView().findViewById<RadioGroup>(R.id.location_group).checkedRadioButtonId)
+            if(Connection.isOnline(this)){
+                val locSetup = dialog.getCustomView().findViewById<RadioButton>(
+                    dialog.getCustomView().findViewById<RadioGroup>(R.id.location_group).checkedRadioButtonId)
 
-            defaultpref.edit().putString("location", locSetup.text.toString()).apply()
+                defaultpref.edit().putString("location", locSetup.text.toString()).apply()
 
-            editor.putString("location", locSetup.text.toString())
-            editor.apply()
-            dialog.dismiss()
-            startActivity(Intent(this, MainActivity::class.java))
+                editor.putString("location", locSetup.text.toString())
+                editor.apply()
+                dialog.dismiss()
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+            else{
+                Toast.makeText(this, "Please check your internet connection and try again", Toast.LENGTH_LONG).show()
+            }
+
         }
 
         dialog.show()

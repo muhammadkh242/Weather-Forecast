@@ -27,8 +27,9 @@ import com.example.weatherforecast.provider.unitsystem.UnitProvider
 class FavoriteActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityFavoriteBinding.inflate(layoutInflater)}
-    private lateinit var factory: FavActivityViewModelFactory
-    private lateinit var favActivityViewModel: FavActivityViewModel
+    private val factory by lazy { FavoriteViewModelFactory(Repository.getInstance(this, WeatherClient.getInstance()
+        ,ConcreteLocalSource(this)), UnitProvider.getInstance(this), LanguageProvider.getInstance(this))}
+    private val favViewModel by lazy { ViewModelProvider(this, factory)[FavoriteViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +39,7 @@ class FavoriteActivity : AppCompatActivity() {
 
         val favorite: Favorite = intent.extras!!.get("favorite_obj")as Favorite
 
-        factory = FavActivityViewModelFactory(Repository.getInstance(this, WeatherClient.getInstance(), ConcreteLocalSource(this)),
-        UnitProvider.getInstance(this), LanguageProvider.getInstance(this))
-        favActivityViewModel = ViewModelProvider(this, factory)[FavActivityViewModel::class.java]
+        favViewModel.getWeatherObject(favorite.lat, favorite.lng)
 
         observeWeather()
 
@@ -56,7 +55,7 @@ class FavoriteActivity : AppCompatActivity() {
 
 
     private fun observeWeather(){
-        favActivityViewModel.weather.observe(this){
+        favViewModel.weather.observe(this) {
             fillWeatherData(it)
         }
     }

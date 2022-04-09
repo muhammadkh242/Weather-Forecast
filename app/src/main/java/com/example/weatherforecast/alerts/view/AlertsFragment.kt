@@ -12,17 +12,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.weatherforecast.R
+import com.example.weatherforecast.alerts.viewmodel.AlertsViewModel
+import com.example.weatherforecast.alerts.viewmodel.AlertsViewModelFactory
+import com.example.weatherforecast.alerts.worker.Worker
 import com.example.weatherforecast.databinding.FragmentAlertsBinding
+import com.example.weatherforecast.db.ConcreteLocalSource
+import com.example.weatherforecast.model.Alert
+import com.example.weatherforecast.model.Repository
+import com.example.weatherforecast.network.WeatherClient
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
-class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnAlertClickListener {
 
     private val binding by lazy{ FragmentAlertsBinding.inflate(layoutInflater) }
+    private val factory by lazy { AlertsViewModelFactory(Repository.getInstance(requireContext(), WeatherClient.getInstance(),
+    ConcreteLocalSource(requireContext()))) }
+    private val alertsViewModel by lazy { ViewModelProvider(requireActivity(), factory) [AlertsViewModel::class.java]}
+
     var day = 0
     var month = 0
     var year = 0
@@ -41,20 +57,30 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
     var endHour = 0
     var endMinute = 0
 
-    var startDate: String = ""
-
+    var startPoint: Long = 0L
+    var endPoint: Long = 0L
+    var duration: Long = 0L
     var end = false
+
+    var startTime: String=""
+    var startDate: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        setUpRecyclerView()
+
+        observeAlerts()
+
         binding.floatBtn.setOnClickListener {
             showDialog()
         }
         return binding.root
     }
+
+
     private fun getDateTimeCalender(){
         val cal: Calendar =  Calendar.getInstance()
         day = cal.get(Calendar.DAY_OF_MONTH)
@@ -64,17 +90,11 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
         minute = cal.get(Calendar.MINUTE)
     }
 
-    private fun pickStartDate(){
+    private fun pickDate(){
         getDateTimeCalender()
         DatePickerDialog(requireContext(),this, year, month, day).show()
 
     }
-    private fun pickEndDate(){
-        getDateTimeCalender()
-        DatePickerDialog(requireContext(),this, year, month, day).show()
-    }
-
-
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         if(end){
@@ -85,6 +105,7 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
             startYear = p1
             startMonth = p2
             startDay = p3
+            startDate = "$startYear-$startMonth-$startDay"
         }
 
 
@@ -99,10 +120,12 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
             endHour = p1
             endMinute = p2
             getEndDateInMillis()
+            end = false
         } else{
             startHour = p1
             startMinute = p2
             getStartDateInMillis()
+            startTime = "$startHour:$startMinute"
 
         }
 
@@ -110,14 +133,20 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
     fun getStartDateInMillis(){
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(startYear, startMonth, startDay, startHour, startMinute)
-        val startPoint: Long = calendar.timeInMillis
-        Log.i("TAG", "getStartDateInMillis: ${startPoint}")
+        startPoint = calendar.timeInMillis
     }
     fun getEndDateInMillis(){
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(endYear, endMonth, endDay, endHour, endMinute)
-        val endPoint: Long = calendar.timeInMillis
-        Log.i("TAG", "getEndDateInMillis: ${endPoint}")
+        endPoint = calendar.timeInMillis
+        duration = ((endPoint - startPoint)/60000)
+    }
+    fun startRequest(){
+        var request = OneTimeWorkRequest.Builder(Worker::class.java)
+            .setInitialDelay(duration, TimeUnit.MINUTES)
+            .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(request)
     }
 
     @SuppressLint("NewApi", "SimpleDateFormat")
@@ -132,19 +161,45 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
             SimpleDateFormat("h:mm a").format(LocalTime.now().second*1000)
 
         dialog.findViewById<Button>(R.id.fromBtn).setOnClickListener {
-            pickStartDate()
+            pickDate()
         }
         dialog.findViewById<Button>(R.id.toBtn).setOnClickListener {
             end = true
-            pickStartDate()
-            dialog.dismiss()
+            pickDate()
         }
         dialog.findViewById<Button>(R.id.saveBtn).setOnClickListener {
-            //save into local db
+            //startRequest()
+
+            dialog.dismiss()
+            var alert = Alert(startDate, startTime, duration)
+            alertsViewModel.addAlert(alert)
+            Log.i("TAG", "Duration: $duration")
+            Toast.makeText(requireContext(), "Saved Alert", Toast.LENGTH_SHORT).show()
+
+
         }
         dialog.show()
         val window: Window? = dialog.window
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
+
+    private fun setUpRecyclerView() = binding.apply {
+        alertsRecycler.layoutManager = LinearLayoutManager(requireContext())
+        alertsRecycler.adapter =  AlertsAdapter(requireContext(),this@AlertsFragment)
+    }
+
+    private fun observeAlerts(){
+        alertsViewModel.getAlerts().observe(requireActivity()){ fillAlertsData(it) }
+    }
+    private fun fillAlertsData(alerts: List<Alert>) = binding.apply {
+        (alertsRecycler.adapter as AlertsAdapter).setData(alerts)
+    }
+
+    override fun onDeleteClick(alert: Alert) {
+        alertsViewModel.deleteAtert(alert)
+        Toast.makeText(context, "Deleted Alert", Toast.LENGTH_SHORT).show()
+
+    }
+
 
 }

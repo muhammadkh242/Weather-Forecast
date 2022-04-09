@@ -14,6 +14,7 @@ import com.example.weatherforecast.model.RepositoryInterface
 import com.example.weatherforecast.model.WeatherResponse
 import com.example.weatherforecast.provider.Language.LanguageProviderInterface
 import com.example.weatherforecast.provider.unitsystem.UnitProviderInterface
+import com.example.weatherforecast.utils.Connection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,8 +33,7 @@ class HomeViewModel(
     var locationLiveData: LiveData<LocationObject> = _locationLiveData
 
     fun getWeatherObject(lat: Double, lng: Double) {
-        Log.i("TAG", "getWeatherObject: $lat $lng")
-        if (isOnline()) {
+        if (Connection.isOnline(application.applicationContext)) {
             getCurrentWeather(unitProvider.getUnitSystem().name, lat.toString()!!, lng.toString()!!, languageProvider.getLanguage())
         } else {
             Toast.makeText(application.applicationContext, "No internet connection", Toast.LENGTH_LONG)
@@ -42,7 +42,6 @@ class HomeViewModel(
     }
 
     private fun getCurrentWeather(units: String, lat: String, lng: String, language: String) = viewModelScope.launch {
-        Log.i("TAG", "getCurrentWeather: $lat $lng")
         val weatherDefault = _repo.getCurrentWeather(units, lat, lng, language)
         withContext(Dispatchers.IO) { _weather.postValue(weatherDefault) }
     }
@@ -51,20 +50,6 @@ class HomeViewModel(
     fun getWeatherFromLocaldb() = viewModelScope.launch { withContext(Dispatchers.IO) {
         _weather.postValue(_repo.getWeatherOffline())
     } }
-
-
-    private fun isOnline(): Boolean {
-        val connectivityManager =
-            application.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return false
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
-        return when {
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
-    }
 
     fun setLastLocation(lat: Double, lng: Double) {
         Log.i("TAG", "setLastLocation: $lat $lng")

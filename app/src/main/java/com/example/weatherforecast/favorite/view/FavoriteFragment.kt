@@ -34,7 +34,7 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
 
     private val binding by lazy { FragmentFavoriteBinding.inflate(layoutInflater) }
     private val mfactory by lazy { FavoriteViewModelFactory(Repository.getInstance(requireContext(), WeatherClient.getInstance()
-    ,ConcreteLocalSource(requireContext())))}
+    ,ConcreteLocalSource(requireContext())), UnitProvider.getInstance(requireContext()), LanguageProvider.getInstance(requireContext()))}
     private val favViewModel by lazy { ViewModelProvider(requireActivity(), mfactory)[FavoriteViewModel::class.java] }
 
     override fun onCreateView(
@@ -69,29 +69,22 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
     }
     private fun fillFavData(favorites: List<Favorite>) = binding.apply {
         (favRecycler.adapter as FavAdapter).setData(favorites)
-        Log.i("TAG", "fillFavData: ${favorites.size}")
     }
 
     override fun onClick(favorite: Favorite) {
-        /*if(isOnline()){
+        if(isOnline()){
             var intent = Intent(requireContext(), FavoriteActivity::class.java)
             intent.putExtra("favorite_obj", favorite)
             startActivity(intent)
         } else{
             Toast.makeText(requireContext(), " No Internet Connection ", Toast.LENGTH_SHORT).show()
-        }*/
-        /*var intent = Intent(requireContext(), Test::class.java)
-        intent.putExtra("favorite_obj", favorite)
-        startActivity(intent)*/
-//        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.favoriteFragment, HomeFragment())
-//            .commitNow()
+        }
+
     }
 
     override fun onDeleteClick(favorite: Favorite) {
-        // delete favorite
         favViewModel.deleteFavorite(favorite)
         Toast.makeText(context, "Deleted Place", Toast.LENGTH_SHORT).show()
-        Log.i("TAG", "onDeleteClick: ${favorite.addressLine}")
     }
 
     private fun isOnline(): Boolean {
