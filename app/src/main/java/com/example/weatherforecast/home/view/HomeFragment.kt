@@ -198,6 +198,7 @@ class HomeFragment : Fragment() {
             arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
             REQUEST_PERMISSIONS_REQUEST_CODE
         )
+        getLastLocation()
     }
     private fun showSnackbar(
         mainTextStringId: String, actionStringId: String,
@@ -245,7 +246,7 @@ class HomeFragment : Fragment() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
             requestPermissions()
-            getLastLocation()
+            //getLastLocation()
         }
         else {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())

@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherForecast">
-
+        <activity
+            android:name=".InitActivity"
+            android:exported="false" />
         <activity
             android:name=".favorite.view.FavoriteActivity"
             android:exported="false" />
@@ -34,7 +36,7 @@
             android:name=".home.view.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".InitActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

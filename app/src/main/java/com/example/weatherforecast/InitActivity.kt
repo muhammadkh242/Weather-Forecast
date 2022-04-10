@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.example.weatherforecast.utils.Connection
+import java.util.*
 
 
 class InitActivity : AppCompatActivity() {
@@ -25,14 +26,18 @@ class InitActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_init)
+
         initPrefs()
         val locationSetup = preferences.getString("location", null)
         if(locationSetup == null){
             showDialog()
         }
         else{
+
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
+
     }
     private fun initPrefs(){
         preferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)

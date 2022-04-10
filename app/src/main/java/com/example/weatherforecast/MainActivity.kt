@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
 
         val lang = defaultPref.getString("language", "en")
-        Toast.makeText(this, "${lang}", Toast.LENGTH_SHORT).show()
         val config = this.resources.configuration
         val locale = Locale(lang)
         Locale.setDefault(locale)
