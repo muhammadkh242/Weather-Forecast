@@ -2,6 +2,7 @@ package com.example.weatherforecast.model
 
 import androidx.room.*
 import com.example.weatherforecast.db.DataConverter
+import com.google.gson.annotations.SerializedName
 
 
 @Entity(tableName = "weather_response")
@@ -23,7 +24,11 @@ data class WeatherResponse
     var hourly: List<Hourly>,
     @TypeConverters(DataConverter::class)
 
-    var daily: List<Daily>
+    var daily: List<Daily>,
+    @TypeConverters(DataConverter::class)
+
+    var alerts: List<Alerts>
+
 
 )
 @TypeConverters(DataConverter::class)
@@ -114,4 +119,15 @@ data class Temperature(
     var night: Double,
     var eve: Double,
     var morn: Double,
+)
+
+@TypeConverters(DataConverter::class)
+data class Alerts(
+    @SerializedName("sender_name") var senderName: String? = null,
+    @SerializedName("event") var event: String? = null,
+    @SerializedName("start") var start: Long? = null,
+    @SerializedName("end") var end: Long? = null,
+    @SerializedName("description") var description: String? = null,
+    @SerializedName("tags") var tags: List<String>
+
 )

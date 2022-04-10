@@ -29,7 +29,7 @@ class HoursAdapter (private val context: Context): RecyclerView.Adapter<HoursAda
         val currentHour = hours[position]
         holder.hourTempTxt.text = currentHour.temp.toInt().toString()
         holder.hourTxt.text = getHourFromTime(currentHour.dt)
-        val iconUrl: String = "https://openweathermap.org/img/wn/${currentHour.weather[0].icon}@2x.png"
+        val iconUrl = "https://openweathermap.org/img/wn/${currentHour.weather[0].icon}@2x.png"
         Glide.with(context).load(iconUrl).centerCrop().into(holder.hourStateIcon)
 
     }
@@ -40,7 +40,6 @@ class HoursAdapter (private val context: Context): RecyclerView.Adapter<HoursAda
 
     fun setData(hours: List<Hourly>){
         this.hours = hours
-        Log.i("TAG", "setData: ${hours.size}")
         notifyDataSetChanged()
     }
 

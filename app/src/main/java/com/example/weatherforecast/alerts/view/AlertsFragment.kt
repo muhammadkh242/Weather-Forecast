@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.example.weatherforecast.R
 import com.example.weatherforecast.alerts.viewmodel.AlertsViewModel
 import com.example.weatherforecast.alerts.viewmodel.AlertsViewModelFactory
@@ -64,6 +65,7 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
 
     var startTime: String=""
     var startDate: String = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -198,7 +200,6 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
     override fun onDeleteClick(alert: Alert) {
         alertsViewModel.deleteAtert(alert)
         Toast.makeText(context, "Deleted Alert", Toast.LENGTH_SHORT).show()
-
     }
 
 

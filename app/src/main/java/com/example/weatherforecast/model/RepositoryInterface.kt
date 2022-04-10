@@ -32,4 +32,7 @@ interface RepositoryInterface {
     fun deleteAlert(alert: Alert)
     //get alerts
     val alerts: LiveData<List<Alert>>
+
+    //worker requests
+    fun sendRequests(alerts: LiveData<List<Alert>>)
 }

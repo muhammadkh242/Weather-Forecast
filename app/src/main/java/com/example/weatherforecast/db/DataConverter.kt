@@ -88,4 +88,15 @@ class DataConverter {
         return gson.fromJson(weatherString, type)
     }
 
+    @TypeConverter
+    fun alertListToJson(alertList: List<Alerts>?) = Gson().toJson(alertList)
+
+    @TypeConverter
+    fun jsonToAlertList(alertString: String?): List<Alerts>? {
+        alertString?.let {
+            return Gson().fromJson(alertString, Array<Alerts>::class.java)?.toList()
+        }
+        return emptyList()
+    }
+
 }

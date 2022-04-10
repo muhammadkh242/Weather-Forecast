@@ -47,7 +47,6 @@ class AlertsAdapter(private val context: Context, private val onAlertClickListen
     }
 
     fun setData(alerts: List<Alert>){
-        Log.i("TAG", "setDate: AlertAdapter ${alerts.size}")
         alertList = alerts
         notifyDataSetChanged()
     }

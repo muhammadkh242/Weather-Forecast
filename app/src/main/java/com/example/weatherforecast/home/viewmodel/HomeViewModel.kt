@@ -32,6 +32,16 @@ class HomeViewModel(
     private val _locationLiveData = MutableLiveData<LocationObject>()
     var locationLiveData: LiveData<LocationObject> = _locationLiveData
 
+    init {
+        sendMyAlertsWorkerRequster()
+    }
+
+    //worker
+    private fun sendMyAlertsWorkerRequster(){
+        _repo.sendRequests(_repo.alerts)
+    }
+
+
     fun getWeatherObject(lat: Double, lng: Double) {
         if (Connection.isOnline(application.applicationContext)) {
             getCurrentWeather(unitProvider.getUnitSystem().name, lat.toString()!!, lng.toString()!!, languageProvider.getLanguage())
