@@ -91,7 +91,9 @@ class Repository(var context: Context, var remoteSource: RemoteSource, var local
                 requests.add(request)
 
             }
-            WorkManager.getInstance(context).enqueue(requests)
+            if(requests.isNotEmpty()){
+                WorkManager.getInstance(context).enqueue(requests)
+            }
         }
     }
 

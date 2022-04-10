@@ -17,6 +17,7 @@ import com.example.weatherforecast.map.viewmodel.MapViewModelFactory
 import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.Repository
 import com.example.weatherforecast.network.WeatherClient
+import com.example.weatherforecast.utils.GeoCoderConverter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -50,7 +51,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.doneBtn.setOnClickListener {
             if(intent.extras?.get("map_request") != null && intent.extras?.get("map_request")!!.equals("fav")){
-                val addressLine = getCityFromMarkedCoord(selectedLat.toDouble(), selectedLng.toDouble())
+                val addressLine = GeoCoderConverter.getCityFromMarkedCoord(selectedLat.toDouble(), selectedLng.toDouble(),this)
 
                 if(addressLine != "Connection Problem"){
                     Favorite(selectedLat.toDouble(), selectedLng.toDouble(),addressLine).apply {
@@ -121,27 +122,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun saveMarkIntoFavPlaces(favorite: Favorite){
         mapViewModel.addToFavorite(favorite)
     }
-
-    private fun getCityFromMarkedCoord(lat: Double, lng: Double): String{
-        try{
-            val geoCoder = Geocoder(this, Locale.getDefault())
-            val addresses = geoCoder.getFromLocation(lat,lng, 1)
-
-            if(addresses[0].adminArea ==null && addresses[0].locality ==null){
-                return addresses[0].countryName
-            }
-            else if (addresses[0].adminArea == null){
-                return "${addresses[0].countryName}, ${addresses[0].locality}"
-            }
-            else if (addresses[0].locality == null){
-                return "${addresses[0].countryName}, ${addresses[0].adminArea}"
-            }
-            return "${addresses[0].countryName}, ${addresses[0].adminArea}, ${addresses[0].locality}"
-
-        }catch (e: IOException){
-            return "Connection Problem"
-        }
-    }
-
 
 }

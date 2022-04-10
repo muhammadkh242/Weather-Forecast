@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.model.Hourly
 import com.bumptech.glide.Glide
+import com.example.weatherforecast.utils.convertNumbersToArabic
 import java.text.SimpleDateFormat
 
 
@@ -27,7 +29,13 @@ class HoursAdapter (private val context: Context): RecyclerView.Adapter<HoursAda
 
     override fun onBindViewHolder(holder: HoursAdapter.ViewHolder, position: Int) {
         val currentHour = hours[position]
-        holder.hourTempTxt.text = currentHour.temp.toInt().toString()
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        if(pref.getString("language","en").equals("ar")){
+            holder.hourTempTxt.text = convertNumbersToArabic(currentHour.temp.toInt())
+        }
+        else{
+            holder.hourTempTxt.text = currentHour.temp.toInt().toString()
+        }
         holder.hourTxt.text = getHourFromTime(currentHour.dt)
         val iconUrl = "https://openweathermap.org/img/wn/${currentHour.weather[0].icon}@2x.png"
         Glide.with(context).load(iconUrl).centerCrop().into(holder.hourStateIcon)

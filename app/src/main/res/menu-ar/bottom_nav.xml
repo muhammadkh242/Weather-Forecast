@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="الرئيسيه"
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_today" />
+
+    <item
+        android:title="المفضله"
+        android:id="@+id/favoriteFragment"
+        android:icon="@drawable/favorite" />
+    <item
+        android:title="التنبيهات"
+        android:id="@+id/alertsFragment"
+        android:icon="@drawable/bill"/>
+    <item
+        android:title="الإعدادات"
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings"/>
+</menu>

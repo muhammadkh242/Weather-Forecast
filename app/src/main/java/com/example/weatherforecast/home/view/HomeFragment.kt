@@ -36,6 +36,7 @@ import com.example.weatherforecast.provider.Language.LanguageProvider
 import com.example.weatherforecast.provider.unitsystem.UnitProvider
 import com.example.weatherforecast.utils.GeoCoderConverter
 import com.example.weatherforecast.utils.UnitSystem
+import com.example.weatherforecast.utils.convertNumbersToArabic
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import java.io.IOException
@@ -66,15 +67,16 @@ class HomeFragment : Fragment() {
         setupRecyclerViews()
         setUnits()
         setDateTxt()
-        languageSettings()
 
         val locationMode = defaultPref.getString("location", "map")
 
         checkPreferences(locationMode!!)
+
         observeWeather()
 
         return binding.root
     }
+
 
 
     private fun setupRecyclerViews() = binding.apply {
@@ -82,12 +84,6 @@ class HomeFragment : Fragment() {
         daysRecycler.adapter = DaysAdapter(requireContext())
         hoursRecycler.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         hoursRecycler.adapter = HoursAdapter(requireContext())
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        //homeViewModel.getWeatherObject()
     }
 
     private fun observeWeather() {
@@ -100,7 +96,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun fillWeatherData(weatherResponse: WeatherResponse) = binding.apply {
-        tempTxt.text = weatherResponse.current.temp.toInt().toString()
+        if(defaultPref.getString("language", "en").equals("ar")){
+            tempTxt.text = convertNumbersToArabic(weatherResponse.current.temp.toInt())
+        }else{
+            tempTxt.text = weatherResponse.current.temp.toInt().toString()
+        }
         descTxt.text = weatherResponse.current.weather[0].description
         (hoursRecycler.adapter as HoursAdapter).setData(weatherResponse.hourly.slice(IntRange(0,23)))
         (daysRecycler.adapter as DaysAdapter).setData(weatherResponse.daily)
@@ -114,12 +114,22 @@ class HomeFragment : Fragment() {
 
     private fun setWeatherStateImag(weatherResponse: WeatherResponse){
         val weatherState = weatherResponse.current.weather[0].description
-        when(weatherState){
-            "clear sky" -> binding.descImage.setImageResource(R.drawable.clearsky)
-            "scattered clouds" -> binding.descImage.setImageResource(R.drawable.scatteredclouds)
-            "overcast clouds" -> binding.descImage.setImageResource(R.drawable.overcastclouds)
-            "broken clouds" -> binding.descImage.setImageResource(R.drawable.brokenclouds)
+        if(defaultPref.getString("language", "en").equals("ar")){
+            when(weatherState){
+                "clear sky" -> binding.descImage.setImageResource(R.drawable.clearsky)
+                "scattered clouds" -> binding.descImage.setImageResource(R.drawable.scatteredclouds)
+                "overcast clouds" -> binding.descImage.setImageResource(R.drawable.overcastclouds)
+                "broken clouds" -> binding.descImage.setImageResource(R.drawable.brokenclouds)
+            }
+        }else{
+            when(weatherState){
+                "سماء صافية" -> binding.descImage.setImageResource(R.drawable.clearsky)
+                "غيوم متفرقة" -> binding.descImage.setImageResource(R.drawable.scatteredclouds)
+                "غيوم قاتمة" -> binding.descImage.setImageResource(R.drawable.overcastclouds)
+                "غيوم متناثرة" -> binding.descImage.setImageResource(R.drawable.brokenclouds)
+            }
         }
+
     }
     private fun setAddressText(weatherResponse: WeatherResponse){
         val addressLine = GeoCoderConverter.getCityFromMarkedCoord(weatherResponse.lat, weatherResponse.lon, requireContext())
@@ -150,10 +160,6 @@ class HomeFragment : Fragment() {
     private fun checkPreferences(locationMode: String){
         if(locationMode.equals("gps")){
             getLastLocation()
-            homeViewModel.locationLiveData.observe(viewLifecycleOwner) {
-                Log.i("TAG", "Location Live Data ${it.lat} ${it.lng} ")
-                homeViewModel.getWeatherObject(it.lat, it.lng)
-            }
         }else{
 
             var mapLat = mapPref.getString("lat", null)
@@ -239,14 +245,14 @@ class HomeFragment : Fragment() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
             requestPermissions()
+            getLastLocation()
         }
         else {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             fusedLocationClient?.lastLocation!!.addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful && task.result != null) {
                     lastLocation = task.result
-                    Log.i("TAG", "getLastLocation: ${lastLocation!!.latitude} ${lastLocation!!.longitude}")
-                    homeViewModel.setLastLocation(lastLocation!!.latitude, lastLocation!!.longitude)
+                    homeViewModel.getWeatherObject(lastLocation!!.latitude,lastLocation!!.longitude)
                 }
                 else {
                     Log.w("TAG", "getLastLocation:exception", task.exception)
@@ -256,37 +262,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun languageSettings(){
-        if (defaultPref.getString("language","en").equals("ar")) { //switch to arabic
-            var locale = Locale("ar")
-            val res = resources
-            val dm = res.displayMetrics
-            val conf = res.configuration
-            conf.locale = locale
-            res.updateConfiguration(conf, dm)
-            val ft: FragmentTransaction = requireFragmentManager().beginTransaction()
-            if (Build.VERSION.SDK_INT >= 26) {
-                ft.setReorderingAllowed(false)
-            }
-            ft.detach(this).attach(this).commit()
 
-        } else {
-
-            var locale = Locale("en")
-            val res = resources
-            val dm = res.displayMetrics
-            val conf = res.configuration
-            conf.locale = locale
-            res.updateConfiguration(conf, dm)
-            val ft: FragmentTransaction = requireFragmentManager().beginTransaction()
-            if (Build.VERSION.SDK_INT >= 26) {
-                ft.setReorderingAllowed(false)
-            }
-            ft.detach(this).attach(this).commit()
-
-        }
-
-    }
 
     companion object {
         const val REQUEST_PERMISSIONS_REQUEST_CODE: Int = 1

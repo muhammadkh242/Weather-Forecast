@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherforecast.R
 import com.example.weatherforecast.model.Daily
+import com.example.weatherforecast.utils.convertNumbersToArabic
 import java.text.SimpleDateFormat
 
 class DaysAdapter(private val context: Context): RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
@@ -65,14 +66,6 @@ class DaysAdapter(private val context: Context): RecyclerView.Adapter<DaysAdapte
 
     fun getDayFromTime(time: Long): String{
         return SimpleDateFormat("EEE").format(time*1000)
-    }
-    fun convertNumbersToArabic(value: Int): String {
-        return (value.toString() + "")
-            .replace("1".toRegex(), "١").replace("2".toRegex(), "٢")
-            .replace("3".toRegex(), "٣").replace("4".toRegex(), "٤")
-            .replace("5".toRegex(), "٥").replace("6".toRegex(), "٦")
-            .replace("7".toRegex(), "٧").replace("8".toRegex(), "٨")
-            .replace("9".toRegex(), "٩").replace("0".toRegex(), "٠")
     }
 
 }

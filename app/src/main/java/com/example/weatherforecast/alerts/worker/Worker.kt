@@ -13,6 +13,9 @@ import com.example.weatherforecast.R
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.model.Repository
 import com.example.weatherforecast.network.WeatherClient
+import com.example.weatherforecast.provider.Language.LanguageProvider
+import com.example.weatherforecast.provider.unitsystem.UnitProvider
+import com.example.weatherforecast.utils.Connection
 
 class Worker(val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     private val repo by lazy{ Repository.getInstance(context, WeatherClient.getInstance(),
@@ -22,8 +25,27 @@ class Worker(val context: Context, params: WorkerParameters) : CoroutineWorker(c
 
     override suspend fun doWork(): Result {
         val weatherResponse = repo.getWeatherOffline()
+        /*        val weatherResponse = repo.getWeatherOffline()
         if(weatherResponse.alerts.isNotEmpty()){
             showNotification((weatherResponse.alerts)[0].event.toString())
+        }*/
+        if(Connection.isOnline(context)){
+            val currentResponse = repo.getCurrentWeather(UnitProvider.getInstance(context).getUnitSystem().name, weatherResponse.lat.toString(),
+            weatherResponse.lon.toString(), LanguageProvider.getInstance(context).getLanguage())
+            if(currentResponse.alerts.isNotEmpty()){
+                showNotification((currentResponse.alerts)[0].event.toString())
+            }
+            else{
+                showNotification("No alerts for this time")
+            }
+        }
+        else{
+            if(weatherResponse.alerts.isNotEmpty()){
+            showNotification((weatherResponse.alerts)[0].event.toString())
+            }
+            else{
+                showNotification("No alerts for this time")
+            }
         }
         return Result.success()
 
@@ -41,7 +63,7 @@ class Worker(val context: Context, params: WorkerParameters) : CoroutineWorker(c
 
         val notification: Notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.bill)
-            .setContentTitle("Alert ")
+            .setContentTitle("Weather Alert")
             .setContentText(event)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true).build()

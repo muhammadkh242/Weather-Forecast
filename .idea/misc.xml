@@ -4,8 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/bill.xml" value="0.1665" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/blank_background.xml" value="0.156" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/custom_progress_bg.xml" value="0.156" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/favorite.xml" value="0.1155" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/ic_7days.xml" value="0.104" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/ic_launcher_background.xml" value="0.156" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/ic_settings.xml" value="0.104" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/ic_today.xml" value="0.104" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/drawable/plus.xml" value="0.163" />
@@ -34,6 +37,8 @@
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/hour_row.xml" value="0.5" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/initial_setup_dialog.xml" value="0.25" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/layout/settings_screen.xml" value="0.18072916666666666" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/menu-ar/bottom_nav.xml" value="0.18072916666666666" />
+        <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/menu-ar/options_menu.xml" value="0.18072916666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/menu/bottom_nav.xml" value="0.19635416666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/menu/options_menu.xml" value="0.19635416666666666" />
         <entry key="..\:/COURSES/Kotlin/Project/Weather Forecast/app/src/main/res/xml/preferences.xml" value="0.33" />

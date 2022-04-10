@@ -11,29 +11,28 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.example.weatherforecast.R
+import java.util.*
 
 
 class SettingsFragment : PreferenceFragmentCompat(){
+    private val defaultPref by lazy{ PreferenceManager.getDefaultSharedPreferences(requireContext()) }
 
     override fun onCreatePreferences(p0: Bundle?, p1: String?) {
         addPreferencesFromResource(R.xml.preferences)
-
-
     }
 
-    private fun isOnline(): Boolean {
-        val connectivityManager =
-            requireActivity().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-                ?: return false
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
-        return when {
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
+    override fun onPause() {
+        super.onPause()
+        val lang = defaultPref.getString("language", "en")
+        val config = this.resources.configuration
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        config.setLocale(locale)
+
+        requireActivity().createConfigurationContext(config)
+        this.resources.updateConfiguration(config, this.resources.displayMetrics)
     }
 
 
