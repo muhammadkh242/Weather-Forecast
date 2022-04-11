@@ -33,9 +33,6 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //binding.noFavImage.visibility = View.INVISIBLE
-        //binding.noFavTxt.visibility = View.INVISIBLE
-
 
         setUpRecyclerView()
 
