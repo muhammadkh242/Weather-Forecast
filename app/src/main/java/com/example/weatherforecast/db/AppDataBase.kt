@@ -6,7 +6,7 @@ import com.example.weatherforecast.model.Alert
 import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.WeatherResponse
 
-@Database(entities = [WeatherResponse::class, Favorite::class, Alert::class], version =6)
+@Database(entities = [WeatherResponse::class, Favorite::class, Alert::class], version =9)
 @TypeConverters(DataConverter::class)
 
 abstract class AppDataBase: RoomDatabase() {
@@ -15,8 +15,6 @@ abstract class AppDataBase: RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: AppDataBase? = null
-
-        //one thread at a time to access this method
         @Synchronized
         fun getInstance(context: Context): AppDataBase{
             return INSTANCE?: Room.databaseBuilder(

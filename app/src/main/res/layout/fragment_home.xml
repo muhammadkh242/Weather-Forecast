@@ -48,7 +48,6 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:textSize="60dp"
-                    android:text="25"
                     android:textColor="#253DA1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -56,7 +55,6 @@
                     android:id="@+id/unitTxt"
                     app:layout_constraintStart_toEndOf="@id/tempTxt"
                     app:layout_constraintTop_toTopOf="@id/tempTxt"
-                    android:text="°C"
                     android:textSize="30dp"
                     android:textColor="#253DA1"
 
@@ -66,7 +64,6 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/descTxt"
-                    android:text="desc"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:layout_width="wrap_content"
@@ -88,7 +85,6 @@
                     android:id="@+id/dateTxt"
                     android:textColor="#253DA1"
                     android:textSize="15dp"
-                    android:text="9 April 2022"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="28dp"
                     app:layout_constraintEnd_toEndOf="parent"

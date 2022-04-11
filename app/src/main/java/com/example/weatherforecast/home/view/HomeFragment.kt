@@ -148,17 +148,36 @@ class HomeFragment : Fragment() {
         val formatted = current.format(formatter)
         binding.dateTxt.text = formatted
     }
+
     fun setUnits(){
-        val unit = defaultPref.getString("unit_system", "metric")
-        if(unit!!.equals(UnitSystem.IMPERIAL.name)){
-            binding.unitTxt.text = " °F"
+        when(defaultPref.getString("language", "en")){
+            "en" -> {
+                val unit = defaultPref.getString("unit_system", "metric")
+                if(unit!!.equals(UnitSystem.IMPERIAL.name)){
+                    binding.unitTxt.text = " °F"
+                }
+                else if(unit!!.equals(UnitSystem.STANDARD.name)){
+                    binding.unitTxt.text = " °K"
+                }
+                else{
+                    binding.unitTxt.text = " °C"
+                }
+            }
+
+            "ar" -> {
+                val unit = defaultPref.getString("unit_system", "metric")
+                if(unit!!.equals(UnitSystem.IMPERIAL.name)){
+                    binding.unitTxt.text = " °ف"
+                }
+                else if(unit!!.equals(UnitSystem.STANDARD.name)){
+                    binding.unitTxt.text = " °ك"
+                }
+                else{
+                    binding.unitTxt.text = " °س"
+                }
+            }
         }
-        else if(unit!!.equals(UnitSystem.STANDARD.name)){
-            binding.unitTxt.text = " °K"
-        }
-        else{
-            binding.unitTxt.text = " °C"
-        }
+
     }
 
     private fun checkPreferences(locationMode: String){

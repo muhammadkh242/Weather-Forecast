@@ -26,6 +26,7 @@ import com.example.weatherforecast.utils.UnitSystem
 import com.example.weatherforecast.utils.convertNumbersToArabic
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class FavoriteActivity() : AppCompatActivity() {
 
@@ -44,7 +45,7 @@ class FavoriteActivity() : AppCompatActivity() {
         setupRecyclerViews()
         setUnits()
         setDateTxt()
-        //val favorite: Favorite = intent.extras!!.get("favorite_obj")as Favorite
+
         var latitude: Double = intent.extras!!.get("lat") as Double
         var longitude: Double = intent.extras!!.get("lng") as Double
         favViewModel.getWeatherObject(latitude, longitude)
@@ -73,7 +74,7 @@ class FavoriteActivity() : AppCompatActivity() {
     }
 
     private fun fillWeatherData(weatherResponse: WeatherResponse) = binding.apply {
-        if(defaultPref.getString("language", "en").equals("ar")){
+        if( defaultPref.getString("language", "en").equals("ar")){
             tempTxt.text = convertNumbersToArabic(weatherResponse.current.temp.toInt())
         }else{
             tempTxt.text = weatherResponse.current.temp.toInt().toString()
@@ -83,43 +84,76 @@ class FavoriteActivity() : AppCompatActivity() {
         (daysRecycler.adapter as DaysAdapter).setData(weatherResponse.daily)
         pressureValue.text = "${weatherResponse.current.pressure} hpa"
         humadityValue.text = "${weatherResponse.current.humidity} %"
-        windValue.text = "${weatherResponse.current.wind_speed} m/s"
+        if( defaultPref.getString("wind", "m/s").equals("m/s")){
+            windValue.text = "${weatherResponse.current.wind_speed} m/s"
+        }else{
+            windValue.text = "${weatherResponse.current.wind_speed * 0.5} mph"
+        }
         cloudValue.text = "${weatherResponse.current.clouds} %"
         uvValue.text = weatherResponse.current.uvi.toString()
         visibilityValue.text = "${weatherResponse.current.visibility} m"
+    }
+    private fun setWeatherStateImag(weatherResponse: WeatherResponse){
+        when(weatherResponse.current.weather[0].main){
+            "Clouds" -> binding.descImage.setImageResource(R.drawable.cloudy)
+            "Clear" -> binding.descImage.setImageResource(R.drawable.sun)
+            "Thunderstorm" -> binding.descImage.setImageResource(R.drawable.thunderstorm)
+            "Drizzle" -> binding.descImage.setImageResource(R.drawable.drizzle)
+            "Rain" -> binding.descImage.setImageResource(R.drawable.rain)
+            "Snow" -> binding.descImage.setImageResource(R.drawable.snow)
+            "Mist" -> binding.descImage.setImageResource(R.drawable.mist)
+            "Smoke" -> binding.descImage.setImageResource(R.drawable.smoke)
+            "Haze" -> binding.descImage.setImageResource(R.drawable.haze)
+            "Dust" -> binding.descImage.setImageResource(R.drawable.dust)
+            "Fog" -> binding.descImage.setImageResource(R.drawable.fog)
+            "Sand" -> binding.descImage.setImageResource(R.drawable.dust)
+            "Ash" -> binding.descImage.setImageResource(R.drawable.haze)
+            "Squall" -> binding.descImage.setImageResource(R.drawable.squall)
+            "Tornado" -> binding.descImage.setImageResource(R.drawable.thunderstorm)
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setDateTxt(){
         val current = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy",
+            Locale( defaultPref.getString("language", "en"))
+        )
         val formatted = current.format(formatter)
         binding.dateTxt.text = formatted
     }
     fun setUnits(){
-        val unit = defaultPref.getString("unit_system", "metric")
-        if(unit!!.equals(UnitSystem.IMPERIAL.name)){
-            binding.unitTxt.text = " °F"
-        }
-        else if(unit!!.equals(UnitSystem.STANDARD.name)){
-            binding.unitTxt.text = " °K"
-        }
-        else{
-            binding.unitTxt.text = " °C"
-        }
-    }
-    private fun setWeatherStateImag(weatherResponse: WeatherResponse){
-        Log.i("TAG", "setWeatherStateImag: ${weatherResponse.current.weather[0].description}")
-        val weatherState = weatherResponse.current.weather[0].description
-        if(defaultPref.getString("language", "en").equals("en")){
-            when(weatherState){
-                "clear sky" -> binding.descImage.setImageResource(R.drawable.clearsky)
-                "scattered clouds" -> binding.descImage.setImageResource(R.drawable.scatteredclouds)
-                "overcast clouds" -> binding.descImage.setImageResource(R.drawable.overcastclouds)
-                "broken clouds" -> binding.descImage.setImageResource(R.drawable.brokenclouds)
+        when(defaultPref.getString("language", "en")){
+            "en" -> {
+                val unit = defaultPref.getString("unit_system", "metric")
+                if(unit!!.equals(UnitSystem.IMPERIAL.name)){
+                    binding.unitTxt.text = " °F"
+                }
+                else if(unit!!.equals(UnitSystem.STANDARD.name)){
+                    binding.unitTxt.text = " °K"
+                }
+                else{
+                    binding.unitTxt.text = " °C"
+                }
+            }
+
+            "ar" -> {
+                val unit = defaultPref.getString("unit_system", "metric")
+                if(unit!!.equals(UnitSystem.IMPERIAL.name)){
+                    binding.unitTxt.text = " °ف"
+                }
+                else if(unit!!.equals(UnitSystem.STANDARD.name)){
+                    binding.unitTxt.text = " °ك"
+                }
+                else{
+                    binding.unitTxt.text = " °س"
+                }
             }
         }
+
     }
+
     private fun setAddressText(weatherResponse: WeatherResponse){
         val addressLine = GeoCoderConverter.getCityFromMarkedCoord(weatherResponse.lat, weatherResponse.lon, this)
         if(!addressLine.equals("Connection Problem")){

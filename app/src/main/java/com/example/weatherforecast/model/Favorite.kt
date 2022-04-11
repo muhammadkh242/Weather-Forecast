@@ -13,6 +13,6 @@ data class Favorite(
     var lat: Double,
     @ColumnInfo(name = "longitude")
     var lng: Double,
-    @ColumnInfo(name = "address")
-    var addressLine: String
+    /*@ColumnInfo(name = "address")
+    var addressLine: String*/
 ): Serializable

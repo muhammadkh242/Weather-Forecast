@@ -2,14 +2,18 @@ package com.example.weatherforecast.utils
 
 import android.content.Context
 import android.location.Geocoder
+import androidx.preference.PreferenceManager
 import java.io.IOException
 import java.util.*
 
 class GeoCoderConverter {
     companion object{
-         fun getCityFromMarkedCoord(lat: Double, lng: Double, context: Context): String{
+
+        fun getCityFromMarkedCoord(lat: Double, lng: Double, context: Context): String{
             try{
-                val geoCoder = Geocoder(context, Locale.getDefault())
+                val geoCoder = Geocoder(context, Locale(
+                    PreferenceManager.getDefaultSharedPreferences(context).getString("language", "en")
+                ))
                 val addresses = geoCoder.getFromLocation(lat,lng, 1)
 
                 if(addresses[0].adminArea ==null && addresses[0].locality ==null){

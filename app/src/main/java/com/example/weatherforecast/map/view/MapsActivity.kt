@@ -54,7 +54,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val addressLine = GeoCoderConverter.getCityFromMarkedCoord(selectedLat.toDouble(), selectedLng.toDouble(),this)
 
                 if(addressLine != "Connection Problem"){
-                    Favorite(selectedLat.toDouble(), selectedLng.toDouble(),addressLine).apply {
+                    Favorite(selectedLat.toDouble(), selectedLng.toDouble()).apply {
                         saveMarkIntoFavPlaces(this)
                         Toast.makeText(this@MapsActivity, "Saved Place", Toast.LENGTH_SHORT).show()
                     }

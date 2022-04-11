@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,7 +14,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -30,6 +33,7 @@ import com.example.weatherforecast.network.WeatherClient
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -40,6 +44,7 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
     private val factory by lazy { AlertsViewModelFactory(Repository.getInstance(requireContext(), WeatherClient.getInstance(),
     ConcreteLocalSource(requireContext()))) }
     private val alertsViewModel by lazy { ViewModelProvider(requireActivity(), factory) [AlertsViewModel::class.java]}
+    private val defaultPref by lazy{ PreferenceManager.getDefaultSharedPreferences(requireContext()) }
 
     var day = 0
     var month = 0
@@ -67,7 +72,7 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
 
     var startTime: String=""
     var startDate: String = ""
-
+    var start: Long = 0L
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,6 +106,7 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         if(end){
             endYear = p1
@@ -110,7 +116,10 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
             startYear = p1
             startMonth = p2
             startDay = p3
-            startDate = "$startYear-$startMonth-$startDay"
+            val calendar: Calendar = Calendar.getInstance()
+            calendar.set(p1, p2, p3)
+            startPoint = calendar.timeInMillis
+
         }
 
 
@@ -125,11 +134,16 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
             endHour = p1
             endMinute = p2
             getEndDateInMillis()
+
             end = false
         } else{
             startHour = p1
             startMinute = p2
             getStartDateInMillis()
+            val calendar: Calendar = Calendar.getInstance()
+            calendar.set(startHour, startMinute)
+            start = calendar.timeInMillis
+
             startTime = "$startHour:$startMinute"
 
         }
@@ -140,20 +154,17 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
         calendar.set(startYear, startMonth, startDay, startHour, startMinute)
         startPoint = calendar.timeInMillis
         getDateTimeCalender()
-        Log.i("TAG", "Current Time $ Date: $year $month $day $hour $minute")
         calendar.set(year,month,day,hour,minute)
+
         currentPoint = calendar.timeInMillis
         duration = ((startPoint - currentPoint)/60000)
-        //startRequest()
     }
     fun getEndDateInMillis(){
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(endYear, endMonth, endDay, endHour, endMinute)
         endPoint = calendar.timeInMillis
-        //duration = ((endPoint - startPoint)/60000)
     }
     fun startRequest(){
-        Log.i("TAG", "startRequest: ")
         var request = OneTimeWorkRequest.Builder(Worker::class.java)
             .setInitialDelay(duration, TimeUnit.MINUTES)
             .build()
@@ -188,9 +199,8 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
             binding.noAlertsImage.visibility = View.INVISIBLE
             binding.noAlertsTxt.visibility = View.INVISIBLE
             dialog.dismiss()
-            var alert = Alert(startDate, startTime, duration)
+            var alert = Alert(startPoint,endPoint,start, duration)
             alertsViewModel.addAlert(alert)
-            Log.i("TAG", "Duration: $duration")
             Toast.makeText(requireContext(), "Saved Alert", Toast.LENGTH_SHORT).show()
             startRequest()
 

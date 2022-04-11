@@ -71,6 +71,7 @@
             android:text="Apply"
             android:focusableInTouchMode="true"
             android:textSize="16sp"
+            android:backgroundTint="@color/white"
             android:textColor="#0094DE"
             />
 

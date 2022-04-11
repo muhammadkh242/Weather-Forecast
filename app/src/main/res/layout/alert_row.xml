@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:padding="5dp"
-    app:cardCornerRadius="8dp">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    app:cardCornerRadius="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -17,10 +18,8 @@
             android:text="dateTxt"
             android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:textSize="17dp"
-            android:layout_marginBottom="15dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="30dp"
             android:layout_width="wrap_content"
@@ -28,10 +27,31 @@
         <TextView
             android:id="@+id/alertTime"
             android:text="time"
-            app:layout_constraintTop_toTopOf="@id/alertDate"
-            app:layout_constraintStart_toEndOf="@id/alertDate"
-            android:layout_marginStart="20dp"
+            app:layout_constraintTop_toBottomOf="@id/alertDate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="70dp"
             android:textColor="#253DA1"
+            android:textSize="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            app:layout_constraintStart_toEndOf="@id/alertDate"
+            android:layout_marginStart="2dp"
+            app:layout_constraintEnd_toStartOf="@id/endDate"
+            app:layout_constraintTop_toTopOf="@+id/alertDate"
+            android:textSize="17dp"
+            android:text=":"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/endDate"
+            app:layout_constraintStart_toEndOf="@id/alertDate"
+            app:layout_constraintTop_toTopOf="@id/alertDate"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"
             android:textSize="17dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

@@ -3,9 +3,7 @@
     <string name="app_name">الطقس</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">الخريطه</string>
-
     <string name="windSpeed">سرعة الرياح</string>
-
     <string name="notification">الإشعارات</string>
     <string name="allownotification">السماح بالإشعارات</string>
     <string name="location">الموقع</string>
@@ -18,5 +16,8 @@
     <string name="humidity">الرطوبة</string>
     <string name="uv">فوق بنفسجية</string>
     <string name="visibility">الرؤيه</string>
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+    <string name="save">حفظ</string>
 
 </resources>
