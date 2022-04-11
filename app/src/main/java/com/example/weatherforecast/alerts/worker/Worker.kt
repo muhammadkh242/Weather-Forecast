@@ -32,30 +32,7 @@ class Worker(val context: Context, params: WorkerParameters) : CoroutineWorker(c
         }else{
             showNotification(weatherResponse.alerts!![0].event.toString())
         }
-        /*        val weatherResponse = repo.getWeatherOffline()
-        if(weatherResponse.alerts.isNotEmpty()){
-            showNotification((weatherResponse.alerts)[0].event.toString())
-        }*/
-        /*if(Connection.isOnline(context)){
-            val currentResponse = repo.getCurrentWeather(UnitProvider.getInstance(context).getUnitSystem().name, weatherResponse.lat.toString(),
-            weatherResponse.lon.toString(), LanguageProvider.getInstance(context).getLanguage())
-            if(currentResponse.alerts.isNotEmpty()){
-                Log.i("TAG", "doWork: ${currentResponse.alerts.get(0).event.toString()}")
-                showNotification(currentResponse.alerts.get(0).event.toString())
-            }
-            else{
-                showNotification("No alerts for this time")
-            }
-        }
-        else{
-            if(weatherResponse.alerts.isNotEmpty()){
-            showNotification((weatherResponse.alerts)[0].event.toString())
-            }
-            else{
-                showNotification("No alerts for this time")
-            }
-        }*/
-        //showNotification("alert")
+
         return Result.success()
 
     }
