@@ -1,30 +1,18 @@
 package com.example.weatherforecast.favorite.view
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentFavoriteBinding
 import com.example.weatherforecast.db.ConcreteLocalSource
-import com.example.weatherforecast.favorite.viewmodel.FavActivityViewModel
-import com.example.weatherforecast.favorite.viewmodel.FavActivityViewModelFactory
 import com.example.weatherforecast.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherforecast.favorite.viewmodel.FavoriteViewModelFactory
-import com.example.weatherforecast.home.view.HomeFragment
 import com.example.weatherforecast.map.view.MapsActivity
 import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.Repository
@@ -92,20 +80,11 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
 
     override fun onClick(favorite: Favorite) {
         if(Connection.isOnline(requireContext())){
-            /*getActivity()?.getFragmentManager()?.popBackStack();
-            favViewModel.getWeatherObject(favorite.lat, favorite.lng)
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.nav_host_fragment, DisplayFragment(favViewModel))
-                .commit()*/
             favViewModel.getWeatherObject(favorite.lat, favorite.lng)
             var intent: Intent = Intent(requireContext(), FavoriteActivity::class.java)
             intent.putExtra("lat", favorite.lat)
             intent.putExtra("lng", favorite.lng)
-
             startActivity(intent)
-
-
-
 
         } else{
             Toast.makeText(requireContext(), " No Internet Connection ", Toast.LENGTH_SHORT).show()

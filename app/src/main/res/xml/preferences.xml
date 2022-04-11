@@ -49,5 +49,16 @@
             android:entryValues="@array/languageValues"/>
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/windSpeed">
+        <ListPreference
+            android:key="wind"
+            android:title="@string/units"
+            android:summary="%s"
+            android:defaultValue="m/s"
+            android:entries="@array/windEntries"
+            android:entryValues="@array/windValues"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

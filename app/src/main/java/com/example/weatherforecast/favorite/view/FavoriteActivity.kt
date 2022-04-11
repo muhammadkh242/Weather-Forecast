@@ -1,12 +1,9 @@
 package com.example.weatherforecast.favorite.view
 
-import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
@@ -15,13 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.ActivityFavoriteBinding
 import com.example.weatherforecast.db.ConcreteLocalSource
-import com.example.weatherforecast.favorite.viewmodel.FavActivityViewModel
-import com.example.weatherforecast.favorite.viewmodel.FavActivityViewModelFactory
 import com.example.weatherforecast.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherforecast.favorite.viewmodel.FavoriteViewModelFactory
 import com.example.weatherforecast.home.view.DaysAdapter
 import com.example.weatherforecast.home.view.HoursAdapter
-import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.Repository
 import com.example.weatherforecast.model.WeatherResponse
 import com.example.weatherforecast.network.WeatherClient

@@ -105,7 +105,11 @@ class HomeFragment : Fragment() {
         (daysRecycler.adapter as DaysAdapter).setData(weatherResponse.daily)
         pressureValue.text = "${weatherResponse.current.pressure} hpa"
         humadityValue.text = "${weatherResponse.current.humidity} %"
-        windValue.text = "${weatherResponse.current.wind_speed} m/s"
+        if( defaultPref.getString("wind", "m/s").equals("m/s")){
+            windValue.text = "${weatherResponse.current.wind_speed} m/s"
+        }else{
+            windValue.text = "${weatherResponse.current.wind_speed * 0.5} mph"
+        }
         cloudValue.text = "${weatherResponse.current.clouds} %"
         uvValue.text = weatherResponse.current.uvi.toString()
         visibilityValue.text = "${weatherResponse.current.visibility} m"

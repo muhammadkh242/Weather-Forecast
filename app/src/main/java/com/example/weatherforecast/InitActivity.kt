@@ -57,6 +57,7 @@ class InitActivity : AppCompatActivity() {
                 editor.apply()
                 dialog.dismiss()
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }
             else{
                 Toast.makeText(this, "Please check your internet connection and try again", Toast.LENGTH_LONG).show()

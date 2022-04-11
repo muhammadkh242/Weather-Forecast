@@ -27,4 +27,13 @@
         <item>GPS</item>
         <item>Map</item>
     </string-array>
+
+    <string-array name="windValues">
+        <item>m/s</item>
+        <item>mph</item>
+    </string-array>
+    <string-array name="windEntries">
+        <item>m/s</item>
+        <item>mph</item>
+    </string-array>
 </resources>

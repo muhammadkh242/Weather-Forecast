@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "alerts")
+@Entity(tableName = "alerts",  primaryKeys = ["startDate", "startTime"])
 
 data class Alert(
     @ColumnInfo(name = "startDate")
@@ -12,6 +12,6 @@ data class Alert(
     @ColumnInfo(name = "startTime")
     var startTime: String,
     @ColumnInfo(name = "duration")
-    @PrimaryKey
     var duration:Long
-    )
+
+)

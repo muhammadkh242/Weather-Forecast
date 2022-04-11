@@ -6,7 +6,7 @@ import com.example.weatherforecast.model.Alert
 import com.example.weatherforecast.model.Favorite
 import com.example.weatherforecast.model.WeatherResponse
 
-@Database(entities = [WeatherResponse::class, Favorite::class, Alert::class], version =5)
+@Database(entities = [WeatherResponse::class, Favorite::class, Alert::class], version =6)
 @TypeConverters(DataConverter::class)
 
 abstract class AppDataBase: RoomDatabase() {
