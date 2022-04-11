@@ -19,4 +19,7 @@ class AlertsViewModel(private val _repo: RepositoryInterface): ViewModel() {
     fun deleteAtert(alert: Alert){
         viewModelScope.launch(Dispatchers.IO){ _repo.deleteAlert(alert) }
     }
+
+    /*fun sendWorkRequest(){
+    }*/
 }

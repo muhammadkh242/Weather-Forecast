@@ -24,16 +24,24 @@ class Worker(val context: Context, params: WorkerParameters) : CoroutineWorker(c
     private val CHANNEL_ID = "CHANNEL_ID"
 
     override suspend fun doWork(): Result {
+        Log.i("TAG", "doWork: ")
         val weatherResponse = repo.getWeatherOffline()
+        Log.i("TAG", "doWork: ${weatherResponse.lat}")
+        if(weatherResponse.alerts.isNullOrEmpty()){
+            showNotification("No alerts for this time")
+        }else{
+            showNotification(weatherResponse.alerts!![0].event.toString())
+        }
         /*        val weatherResponse = repo.getWeatherOffline()
         if(weatherResponse.alerts.isNotEmpty()){
             showNotification((weatherResponse.alerts)[0].event.toString())
         }*/
-        if(Connection.isOnline(context)){
+        /*if(Connection.isOnline(context)){
             val currentResponse = repo.getCurrentWeather(UnitProvider.getInstance(context).getUnitSystem().name, weatherResponse.lat.toString(),
             weatherResponse.lon.toString(), LanguageProvider.getInstance(context).getLanguage())
             if(currentResponse.alerts.isNotEmpty()){
-                showNotification((currentResponse.alerts)[0].event.toString())
+                Log.i("TAG", "doWork: ${currentResponse.alerts.get(0).event.toString()}")
+                showNotification(currentResponse.alerts.get(0).event.toString())
             }
             else{
                 showNotification("No alerts for this time")
@@ -46,11 +54,13 @@ class Worker(val context: Context, params: WorkerParameters) : CoroutineWorker(c
             else{
                 showNotification("No alerts for this time")
             }
-        }
+        }*/
+        //showNotification("alert")
         return Result.success()
 
     }
     fun showNotification(event: String){
+        Log.i("TAG", "showNotification: ")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name: CharSequence = "MyChannel"
             val desc: String = "Description"

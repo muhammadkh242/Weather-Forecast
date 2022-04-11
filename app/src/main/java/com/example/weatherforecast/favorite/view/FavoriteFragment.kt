@@ -13,6 +13,9 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentFavoriteBinding
@@ -28,6 +31,7 @@ import com.example.weatherforecast.model.Repository
 import com.example.weatherforecast.network.WeatherClient
 import com.example.weatherforecast.provider.Language.LanguageProvider
 import com.example.weatherforecast.provider.unitsystem.UnitProvider
+import com.example.weatherforecast.utils.Connection
 
 
 class FavoriteFragment : Fragment(), OnItemClickListener {
@@ -41,6 +45,9 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //binding.noFavImage.visibility = View.INVISIBLE
+        //binding.noFavTxt.visibility = View.INVISIBLE
+
 
         setUpRecyclerView()
 
@@ -58,24 +65,48 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
         return binding.root
     }
 
+
+
     private fun setUpRecyclerView() = binding.apply {
         favRecycler.layoutManager = LinearLayoutManager(requireContext())
         favRecycler.adapter = FavAdapter(requireContext(),this@FavoriteFragment)
     }
 
     private fun observeFavorites(){
-        favViewModel.getFavorites().observe(viewLifecycleOwner) { fillFavData(it) }
+        favViewModel.getFavorites().observe(viewLifecycleOwner) {
+            fillFavData(it)
+            checkFavListSize(it)
+        }
 
     }
     private fun fillFavData(favorites: List<Favorite>) = binding.apply {
         (favRecycler.adapter as FavAdapter).setData(favorites)
     }
 
+    private fun checkFavListSize(favorites: List<Favorite>){
+        if(favorites.isNotEmpty()){
+            binding.noFavImage.visibility = View.INVISIBLE
+            binding.noFavTxt.visibility = View.INVISIBLE
+        }
+    }
+
     override fun onClick(favorite: Favorite) {
-        if(isOnline()){
-            var intent = Intent(requireContext(), FavoriteActivity::class.java)
-            intent.putExtra("favorite_obj", favorite)
+        if(Connection.isOnline(requireContext())){
+            /*getActivity()?.getFragmentManager()?.popBackStack();
+            favViewModel.getWeatherObject(favorite.lat, favorite.lng)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.nav_host_fragment, DisplayFragment(favViewModel))
+                .commit()*/
+            favViewModel.getWeatherObject(favorite.lat, favorite.lng)
+            var intent: Intent = Intent(requireContext(), FavoriteActivity::class.java)
+            intent.putExtra("lat", favorite.lat)
+            intent.putExtra("lng", favorite.lng)
+
             startActivity(intent)
+
+
+
+
         } else{
             Toast.makeText(requireContext(), " No Internet Connection ", Toast.LENGTH_SHORT).show()
         }
@@ -87,18 +118,5 @@ class FavoriteFragment : Fragment(), OnItemClickListener {
         Toast.makeText(context, "Deleted Place", Toast.LENGTH_SHORT).show()
     }
 
-    private fun isOnline(): Boolean {
-        val connectivityManager =
-            requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-                ?: return false
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
-        return when {
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
-    }
 
 }

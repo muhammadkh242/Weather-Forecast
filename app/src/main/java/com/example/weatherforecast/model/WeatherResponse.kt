@@ -1,5 +1,6 @@
 package com.example.weatherforecast.model
 
+import androidx.annotation.Nullable
 import androidx.room.*
 import com.example.weatherforecast.db.DataConverter
 import com.google.gson.annotations.SerializedName
@@ -26,8 +27,8 @@ data class WeatherResponse
 
     var daily: List<Daily>,
     @TypeConverters(DataConverter::class)
-
-    var alerts: List<Alerts>
+    @Nullable
+    var alerts: List<Alerts>?
 
 
 )

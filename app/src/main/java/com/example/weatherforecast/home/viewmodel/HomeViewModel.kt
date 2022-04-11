@@ -32,14 +32,14 @@ class HomeViewModel(
     private val _locationLiveData = MutableLiveData<LocationObject>()
     var locationLiveData: LiveData<LocationObject> = _locationLiveData
 
-    init {
+    /*init {
         sendMyAlertsWorkerRequster()
     }
 
     //worker
     private fun sendMyAlertsWorkerRequster(){
         _repo.sendRequests(_repo.alerts)
-    }
+    }*/
 
 
     fun getWeatherObject(lat: Double, lng: Double) {

@@ -37,8 +37,25 @@ class HoursAdapter (private val context: Context): RecyclerView.Adapter<HoursAda
             holder.hourTempTxt.text = currentHour.temp.toInt().toString()
         }
         holder.hourTxt.text = getHourFromTime(currentHour.dt)
-        val iconUrl = "https://openweathermap.org/img/wn/${currentHour.weather[0].icon}@2x.png"
-        Glide.with(context).load(iconUrl).centerCrop().into(holder.hourStateIcon)
+        when (currentHour.weather[0].main) {
+            "Clouds" -> holder.hourStateIcon.setImageResource(R.drawable.cloudy)
+            "Clear" -> holder.hourStateIcon.setImageResource(R.drawable.sun)
+            "Thunderstorm" -> holder.hourStateIcon.setImageResource(R.drawable.thunderstorm)
+            "Drizzle" -> holder.hourStateIcon.setImageResource(R.drawable.drizzle)
+            "Rain" -> holder.hourStateIcon.setImageResource(R.drawable.rain)
+            "Snow" -> holder.hourStateIcon.setImageResource(R.drawable.snow)
+            "Mist" -> holder.hourStateIcon.setImageResource(R.drawable.mist)
+            "Smoke" -> holder.hourStateIcon.setImageResource(R.drawable.smoke)
+            "Haze" -> holder.hourStateIcon.setImageResource(R.drawable.haze)
+            "Dust" -> holder.hourStateIcon.setImageResource(R.drawable.dust)
+            "Fog" -> holder.hourStateIcon.setImageResource(R.drawable.fog)
+            "Sand" -> holder.hourStateIcon.setImageResource(R.drawable.dust)
+            "Ash" -> holder.hourStateIcon.setImageResource(R.drawable.haze)
+            "Squall" -> holder.hourStateIcon.setImageResource(R.drawable.squall)
+            "Tornado" -> holder.hourStateIcon.setImageResource(R.drawable.thunderstorm)
+        }
+//        val iconUrl = "https://openweathermap.org/img/wn/${currentHour.weather[0].icon}@2x.png"
+//        Glide.with(context).load(iconUrl).centerCrop().into(holder.hourStateIcon)
 
     }
 

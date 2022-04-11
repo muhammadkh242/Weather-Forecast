@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -58,6 +59,7 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
     var endHour = 0
     var endMinute = 0
 
+    var currentPoint: Long = 0L
     var startPoint: Long = 0L
     var endPoint: Long = 0L
     var duration: Long = 0L
@@ -71,7 +73,8 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        binding.noAlertsImage.visibility = View.INVISIBLE
+        binding.noAlertsTxt.visibility = View.INVISIBLE
         setUpRecyclerView()
 
         observeAlerts()
@@ -136,29 +139,41 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(startYear, startMonth, startDay, startHour, startMinute)
         startPoint = calendar.timeInMillis
+        getDateTimeCalender()
+        Log.i("TAG", "Current Time $ Date: $year $month $day $hour $minute")
+        calendar.set(year,month,day,hour,minute)
+        currentPoint = calendar.timeInMillis
+        duration = ((startPoint - currentPoint)/60000)
+        //startRequest()
     }
     fun getEndDateInMillis(){
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(endYear, endMonth, endDay, endHour, endMinute)
         endPoint = calendar.timeInMillis
-        duration = ((endPoint - startPoint)/60000)
+        //duration = ((endPoint - startPoint)/60000)
     }
     fun startRequest(){
+        Log.i("TAG", "startRequest: ")
         var request = OneTimeWorkRequest.Builder(Worker::class.java)
             .setInitialDelay(duration, TimeUnit.MINUTES)
             .build()
 
         WorkManager.getInstance(requireContext()).enqueue(request)
+        duration = 0L
     }
 
     @SuppressLint("NewApi", "SimpleDateFormat")
     private fun showDialog(){
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.alert_dialog)
+
         dialog.findViewById<TextView>(R.id.fromDateTxt).text = LocalDate.now().toString()
+
         dialog.findViewById<TextView>(R.id.fromTimeTxt).text =
             SimpleDateFormat("h:mm a").format(LocalTime.now().second*1000)
+
         dialog.findViewById<TextView>(R.id.toDateTxt).text = LocalDate.now().toString()
+
         dialog.findViewById<TextView>(R.id.toTimeTxt).text =
             SimpleDateFormat("h:mm a").format(LocalTime.now().second*1000)
 
@@ -170,13 +185,14 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
             pickDate()
         }
         dialog.findViewById<Button>(R.id.saveBtn).setOnClickListener {
-            //startRequest()
-
+            binding.noAlertsImage.visibility = View.INVISIBLE
+            binding.noAlertsTxt.visibility = View.INVISIBLE
             dialog.dismiss()
             var alert = Alert(startDate, startTime, duration)
             alertsViewModel.addAlert(alert)
             Log.i("TAG", "Duration: $duration")
             Toast.makeText(requireContext(), "Saved Alert", Toast.LENGTH_SHORT).show()
+            startRequest()
 
 
         }
@@ -191,10 +207,20 @@ class AlertsFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePicke
     }
 
     private fun observeAlerts(){
-        alertsViewModel.getAlerts().observe(requireActivity()){ fillAlertsData(it) }
+        alertsViewModel.getAlerts().observe(requireActivity()){
+            fillAlertsData(it)
+            checkAlertsListSize(it)
+
+        }
     }
     private fun fillAlertsData(alerts: List<Alert>) = binding.apply {
         (alertsRecycler.adapter as AlertsAdapter).setData(alerts)
+    }
+    private fun checkAlertsListSize(alerts: List<Alert>){
+        if(alerts.isEmpty()){
+            binding.noAlertsImage.visibility = View.VISIBLE
+            binding.noAlertsTxt.visibility = View.VISIBLE
+        }
     }
 
     override fun onDeleteClick(alert: Alert) {

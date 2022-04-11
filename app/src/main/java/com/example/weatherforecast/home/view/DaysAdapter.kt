@@ -38,8 +38,25 @@ class DaysAdapter(private val context: Context): RecyclerView.Adapter<DaysAdapte
 
         }
         holder.dayDescTxt.text = currentDay.weather[0].description
-        val iconUrl: String = "https://openweathermap.org/img/wn/${currentDay.weather[0].icon}@2x.png"
-        Glide.with(context).load(iconUrl).centerCrop().into(holder.dayStateIcon)
+        when (currentDay.weather[0].main) {
+            "Clouds" -> holder.dayStateIcon.setImageResource(R.drawable.cloudy)
+            "Clear" -> holder.dayStateIcon.setImageResource(R.drawable.sun)
+            "Thunderstorm" -> holder.dayStateIcon.setImageResource(R.drawable.thunderstorm)
+            "Drizzle" -> holder.dayStateIcon.setImageResource(R.drawable.drizzle)
+            "Rain" -> holder.dayStateIcon.setImageResource(R.drawable.rain)
+            "Snow" -> holder.dayStateIcon.setImageResource(R.drawable.snow)
+            "Mist" -> holder.dayStateIcon.setImageResource(R.drawable.mist)
+            "Smoke" -> holder.dayStateIcon.setImageResource(R.drawable.smoke)
+            "Haze" -> holder.dayStateIcon.setImageResource(R.drawable.haze)
+            "Dust" -> holder.dayStateIcon.setImageResource(R.drawable.dust)
+            "Fog" -> holder.dayStateIcon.setImageResource(R.drawable.fog)
+            "Sand" -> holder.dayStateIcon.setImageResource(R.drawable.dust)
+            "Ash" -> holder.dayStateIcon.setImageResource(R.drawable.haze)
+            "Squall" -> holder.dayStateIcon.setImageResource(R.drawable.squall)
+            "Tornado" -> holder.dayStateIcon.setImageResource(R.drawable.thunderstorm)
+        }
+//        val iconUrl: String = "https://openweathermap.org/img/wn/${currentDay.weather[0].icon}@2x.png"
+//        Glide.with(context).load(iconUrl).centerCrop().into(holder.dayStateIcon)
 
     }
 

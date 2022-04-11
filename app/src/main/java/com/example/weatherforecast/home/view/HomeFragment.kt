@@ -57,7 +57,6 @@ class HomeFragment : Fragment() {
     private val mapPref by lazy{ requireContext().getSharedPreferences("mapPref",  Context.MODE_PRIVATE) }
     private var lastLocation: Location? = null
     private var fusedLocationClient: FusedLocationProviderClient? = null
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,7 +95,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun fillWeatherData(weatherResponse: WeatherResponse) = binding.apply {
-        if(defaultPref.getString("language", "en").equals("ar")){
+        if( defaultPref.getString("language", "en").equals("ar")){
             tempTxt.text = convertNumbersToArabic(weatherResponse.current.temp.toInt())
         }else{
             tempTxt.text = weatherResponse.current.temp.toInt().toString()
@@ -113,21 +112,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun setWeatherStateImag(weatherResponse: WeatherResponse){
-        val weatherState = weatherResponse.current.weather[0].description
-        if(defaultPref.getString("language", "en").equals("ar")){
-            when(weatherState){
-                "clear sky" -> binding.descImage.setImageResource(R.drawable.clearsky)
-                "scattered clouds" -> binding.descImage.setImageResource(R.drawable.scatteredclouds)
-                "overcast clouds" -> binding.descImage.setImageResource(R.drawable.overcastclouds)
-                "broken clouds" -> binding.descImage.setImageResource(R.drawable.brokenclouds)
-            }
-        }else{
-            when(weatherState){
-                "سماء صافية" -> binding.descImage.setImageResource(R.drawable.clearsky)
-                "غيوم متفرقة" -> binding.descImage.setImageResource(R.drawable.scatteredclouds)
-                "غيوم قاتمة" -> binding.descImage.setImageResource(R.drawable.overcastclouds)
-                "غيوم متناثرة" -> binding.descImage.setImageResource(R.drawable.brokenclouds)
-            }
+        when(weatherResponse.current.weather[0].main){
+            "Clouds" -> binding.descImage.setImageResource(R.drawable.cloudy)
+            "Clear" -> binding.descImage.setImageResource(R.drawable.sun)
+            "Thunderstorm" -> binding.descImage.setImageResource(R.drawable.thunderstorm)
+            "Drizzle" -> binding.descImage.setImageResource(R.drawable.drizzle)
+            "Rain" -> binding.descImage.setImageResource(R.drawable.rain)
+            "Snow" -> binding.descImage.setImageResource(R.drawable.snow)
+            "Mist" -> binding.descImage.setImageResource(R.drawable.mist)
+            "Smoke" -> binding.descImage.setImageResource(R.drawable.smoke)
+            "Haze" -> binding.descImage.setImageResource(R.drawable.haze)
+            "Dust" -> binding.descImage.setImageResource(R.drawable.dust)
+            "Fog" -> binding.descImage.setImageResource(R.drawable.fog)
+            "Sand" -> binding.descImage.setImageResource(R.drawable.dust)
+            "Ash" -> binding.descImage.setImageResource(R.drawable.haze)
+            "Squall" -> binding.descImage.setImageResource(R.drawable.squall)
+            "Tornado" -> binding.descImage.setImageResource(R.drawable.thunderstorm)
         }
 
     }
@@ -140,7 +140,7 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setDateTxt(){
         val current = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy",Locale( defaultPref.getString("language", "en")))
         val formatted = current.format(formatter)
         binding.dateTxt.text = formatted
     }
@@ -188,7 +188,7 @@ class HomeFragment : Fragment() {
             }
         }
         else {
-            Log.i("TAG", "Requesting permission")
+            //Log.i("TAG", "Requesting permission")
             startLocationPermissionRequest()
         }
     }
