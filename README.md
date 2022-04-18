@@ -12,3 +12,4 @@ Application Key Features :
     - Ability add weather alerts.
     - Display weather information in different unit systems and
     languages.
+    
