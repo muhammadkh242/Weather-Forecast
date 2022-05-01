@@ -31,5 +31,5 @@ Developed in Kotlin programming using MVVM architectural design pattern.
 
 <img src="https://user-images.githubusercontent.com/66799646/166154566-862593d8-fd0a-41e8-8e9e-785ad6f66935.jpeg" height="640" width="288">
 
-##API
+## openwathermap API
 https://openweathermap.org/api/
