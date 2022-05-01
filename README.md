@@ -15,6 +15,13 @@ Developed in Kotlin programming using MVVM architectural design pattern.
 - Ability add weather alerts.
 - Display weather information in different unit systems and languages.
 
+## Tools
+
+- Retrofit2
+- Room DB
+- Preferences Library
+- Bottom Navigation
+
 ## Screens
 
 <img src="https://user-images.githubusercontent.com/66799646/166154244-54be1827-7f75-4038-96c7-35d578eac778.jpeg" height="640" width="288">
