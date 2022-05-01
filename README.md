@@ -1,4 +1,3 @@
-![home](https://user-images.githubusercontent.com/66799646/166154244-54be1827-7f75-4038-96c7-35d578eac778.jpeg)
 # Weather Forecast
 
 Android Mobile Application that displays the weather status and the temperature
@@ -15,3 +14,7 @@ Developed in Kotlin programming using MVVM architectural design pattern.
 - Ability to add favorite places and track its weather status.
 - Ability add weather alerts.
 - Display weather information in different unit systems and languages.
+
+## Screens
+
+![home](https://user-images.githubusercontent.com/66799646/166154244-54be1827-7f75-4038-96c7-35d578eac778.jpeg)
