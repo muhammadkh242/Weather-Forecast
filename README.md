@@ -17,4 +17,4 @@ Developed in Kotlin programming using MVVM architectural design pattern.
 
 ## Screens
 
-!<home>(https://user-images.githubusercontent.com/66799646/166154244-54be1827-7f75-4038-96c7-35d578eac778.jpeg)
+<img src="https://user-images.githubusercontent.com/66799646/166154244-54be1827-7f75-4038-96c7-35d578eac778.jpeg">
