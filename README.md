@@ -6,8 +6,7 @@ and add it to a list of favorite locations and
 get all the weather information at this location. In addition you can set an alerts for
 rain, wind, very low or very high temperature, fog, snow … etc
 
-Developed in Kotlin programming using: MVVM architectural design pattern _ Bottom Navigation _ Preferences library _ Kotlin coroutines _ Retrofit
-_ Coroutine Worker _ Room DB
+Developed in Kotlin programming using: MVVM architectural design pattern _ Bottom Navigation _ Preferences library _ Kotlin coroutines _ Retrofit _ Coroutine Worker _ Room DB_LiveData_view binding
 
 ## Features
 
